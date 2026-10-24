@@ -10,16 +10,16 @@ from .repo import InMemoryOrderRepository
 from .state import CallState
 from .tools import ToolDispatcher
 from .turn import Brain, UserTurn
-from providers.llm.mock import MockLLM
+from providers.llm.factory import create_llm
 
 
-async def run(tenant: str) -> None:
+async def run(tenant: str, llm_mode: str) -> None:
     root = Path(__file__).resolve().parents[3]
     config = TenantConfigLoader(root).load(tenant)
     clock = SystemClock()
     state = CallState()
     dispatcher = ToolDispatcher(InMemoryOrderRepository(clock), state, config, clock.now)
-    brain = Brain(config, state, MockLLM(), dispatcher)
+    brain = Brain(config, state, create_llm(llm_mode), dispatcher)
     print("Aria text mode. Type /quit to exit.")
     while True:
         text = input("You: ")
@@ -36,5 +36,6 @@ async def run(tenant: str) -> None:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--tenant", default="aura")
+    parser.add_argument("--llm", choices=["mock", "gemini", "groq", "auto"], default="mock")
     args = parser.parse_args()
-    asyncio.run(run(args.tenant))
+    asyncio.run(run(args.tenant, args.llm))

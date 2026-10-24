@@ -38,4 +38,6 @@ The environment checker now detects declared variable names in the local `.env` 
 
 Implemented foundations: injectable IST clock, relative-date in-memory orders, tenant loader, order-ID normalization, English/Romanized-Hindi yes/no classification, deterministic policy functions, confirmation-aware tools, serializable call state, prompt builder, output guardrails, deterministic summary fallback, provider breaker/resolver seams, MockLLM, and initial unit tests.
 
-Not yet implemented: full provider adapters, complete streaming turn/tool loop, CLI, all required eval scenarios, coverage run, live eval, and the remaining Phase 1 ADRs. No audio, LiveKit, web UI, database, or deployment was added.
+Not yet complete or verified: provider integration against live SDKs, complete streaming turn/tool loop, full CLI commands, all required eval scenarios, coverage run, live eval, and the remaining Phase 1 ADRs. No audio, LiveKit, web UI, database, or deployment was added.
+
+Additional Phase 1 work: lazy Gemini and Groq adapter modules, provider-neutral message types, model resolver, circuit breaker tests, mock-first factory, text CLI provider selection, initial scripted scenario YAML, and a quota-safe scripted runner placeholder. These files have not been executed because Python is not installed on this desktop; no test or coverage pass is claimed.

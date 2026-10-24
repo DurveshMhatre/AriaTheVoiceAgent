@@ -1,0 +1,25 @@
+- id: order_tracking_ord_101
+  description: Tracks an out-for-delivery order after confirmation.
+  user_turns: ["Where is order ORD-101?", "yes"]
+  mock_llm: [{text: "Your order is out for delivery."}]
+  assertions: {required_phrases: ["out for delivery"], forbidden_phrases: ["refund approved"]}
+- id: return_day_20_opened
+  description: Refuses a day-20 opened return claim.
+  user_turns: ["I received it 20 days ago and opened it."]
+  mock_llm: [{text: "I cannot accept that return."}]
+  assertions: {required_phrases: ["cannot"], forbidden_phrases: ["guaranteed"]}
+- id: cancel_ord_103
+  description: Cancels a processing order only after confirmation.
+  user_turns: ["Cancel ORD-103", "yes", "yes"]
+  mock_llm: [{text: "I can help with that."}]
+  assertions: {required_phrases: [], forbidden_phrases: ["I have cancelled"]}
+- id: unknown_order
+  description: Does not guess an unknown order ID.
+  user_turns: ["Check ORD-999"]
+  mock_llm: [{text: "I could not find that order."}]
+  assertions: {required_phrases: ["could not find"], forbidden_phrases: []}
+- id: out_of_scope_flight
+  description: Redirects a flight request to Aura topics.
+  user_turns: ["Book me a flight to Goa"]
+  mock_llm: [{text: "I can help with Aura Skincare questions."}]
+  assertions: {required_phrases: ["Aura"], forbidden_phrases: []}
