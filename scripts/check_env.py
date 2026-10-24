@@ -31,8 +31,8 @@ def dotenv_names(path: Path) -> set[str]:
         line = line.strip()
         if not line or line.startswith("#") or "=" not in line:
             continue
-        name = line.split("=", 1)[0].strip()
-        if name and name.replace("_", "a").isalnum() and name[0].isalpha():
+        name, value = (part.strip() for part in line.split("=", 1))
+        if name and value and name.replace("_", "a").isalnum() and name[0].isalpha():
             names.add(name)
     return names
 
