@@ -21,3 +21,6 @@ out/
 
 # Local tooling
 .gitleaks/
+evals/results/
+apps/agent/.coverage
+apps/agent/.mypy_cache/

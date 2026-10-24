@@ -14,6 +14,16 @@ python scripts/check_env.py
 
 The environment checker prints only `SET` or `MISSING`. Never commit `.env` or paste secrets into chat.
 
+## Secret scanning
+
+The preferred scanner is gitleaks. If it is not installed, the pre-commit hook and the manual check use the repository-contained PowerShell equivalent:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/secret_scan.ps1
+```
+
+It checks tracked working-tree files and every reachable Git commit, and prints only filenames or a pass count.
+
 ## How I think about the system
 
 1. The Brain is separate from audio so policy and guardrails can be tested cheaply.

@@ -34,7 +34,8 @@
     "cod_limit_inr": 2500,
     "cod_limit_inclusive": true,
     "cancellable_status": "Processing",
-    "id_format": "ORD-###"
+    "id_format": "ORD-###",
+    "id_confirmation": "always"
   },
   "enabled_tools": [
     "get_order_details",

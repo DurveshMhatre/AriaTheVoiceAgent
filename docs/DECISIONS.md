@@ -83,3 +83,33 @@
 **Decision:** Implement the literal `above` rule and flag the ambiguity.
 **Alternatives:** Interpret “above” as at-or-above.
 **Consequences:** Tests will make the chosen behavior explicit.
+
+## ADR-015: Phase 1 contract amendments
+**Context:** The Brain must distinguish order-record evidence from customer claims, damage cases, confirmation failures, and escalation reasons.
+**Decision:** Extend tool results and summary outcomes while keeping schema version 1.
+**Alternatives:** Return a bare boolean or free-text reason.
+**Consequences:** The Brain can explain missing evidence safely, and contract conformance tests become more important.
+
+## ADR-016: Order confirmation gate
+**Context:** An evaluator login does not verify the customer named by an order ID.
+**Decision:** Candidate IDs must be confirmed before order lookup, cancellation, or order-based eligibility checks.
+**Alternatives:** Trust the first normalized ID.
+**Consequences:** One extra conversational turn prevents accidental disclosure and guessing.
+
+## ADR-017: Provider-neutral messages and streaming seam
+**Context:** Gemini and Groq represent tool-call turns differently, while Phase 2 needs sentence streaming and interruption support.
+**Decision:** The Brain uses internal message/tool/result types and exposes an async event stream; adapters retain vendor-specific fields privately.
+**Alternatives:** Put SDK response objects in Brain state.
+**Consequences:** Adapter code is more explicit, but provider changes do not rewrite policy code.
+
+## ADR-018: Scripted-first test strategy
+**Context:** Real quotas are scarce and model behavior is nondeterministic.
+**Decision:** CI uses scripted MockLLM scenarios; live evals are manual, capped, and never golden by default.
+**Alternatives:** Run live calls in CI.
+**Consequences:** CI proves plumbing and guardrails, not current model quality.
+
+## ADR-019: Python tooling
+**Context:** The Brain is Python and must remain understandable for a solo developer.
+**Decision:** Python 3.12 with pinned pytest, pytest-cov, Ruff, mypy strict on `brain/`, jsonschema, and PyYAML.
+**Alternatives:** Unpinned dependencies or a larger framework.
+**Consequences:** Reproducible local checks, with dependency updates requiring an explicit research pass.

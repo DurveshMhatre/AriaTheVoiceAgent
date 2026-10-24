@@ -2,7 +2,7 @@
 
 ## Phase 0 — Research and contracts
 
-Status: in progress pending validation and gate review.
+Status: Phase 0 closed; Phase 1 Task 0 and deterministic Brain foundations in progress.
 
 Completed in this work session:
 
@@ -29,3 +29,13 @@ Validation evidence:
 - The required `python scripts/check_env.py` is present but could not run for the same reason. It has not printed or exposed any environment value.
 - `.env` exists locally but is excluded by `.gitignore`; the repository currently has no tracked files before the Phase 0 commit.
 - A full Draft 2020-12 validation run remains a gate item once Python plus `jsonschema` and `PyYAML` are available.
+
+## Phase 1 — Brain, text mode only
+
+Task 0 status: started.
+
+The environment checker now detects declared variable names in the local `.env` without reading or printing values. The earlier `MISSING` result came from checking only inherited process variables. The local `.env` names include the provider keys, but this machine still has no installed Python runtime, so Python checks cannot run yet.
+
+Implemented foundations: injectable IST clock, relative-date in-memory orders, tenant loader, order-ID normalization, English/Romanized-Hindi yes/no classification, deterministic policy functions, confirmation-aware tools, serializable call state, prompt builder, output guardrails, deterministic summary fallback, provider breaker/resolver seams, MockLLM, and initial unit tests.
+
+Not yet implemented: full provider adapters, complete streaming turn/tool loop, CLI, all required eval scenarios, coverage run, live eval, and the remaining Phase 1 ADRs. No audio, LiveKit, web UI, database, or deployment was added.

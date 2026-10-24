@@ -37,7 +37,7 @@
       "properties": {
         "ok": { "type": "boolean" },
         "data": { "type": ["object", "array", "string", "number", "boolean", "null"] },
-        "error_code": { "type": ["string", "null"], "enum": ["INVALID_FORMAT", "NOT_FOUND", "NOT_ELIGIBLE", "TIMEOUT", "INTERNAL", null] },
+        "error_code": { "type": ["string", "null"], "enum": ["INVALID_FORMAT", "NOT_FOUND", "NOT_ELIGIBLE", "TIMEOUT", "INTERNAL", "ID_NOT_CONFIRMED", "MISSING_ARGUMENT", null] },
         "speakable_hint": { "type": ["string", "null"] }
       }
     }
