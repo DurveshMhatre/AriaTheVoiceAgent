@@ -1,5 +1,5 @@
 $ErrorActionPreference = 'Stop'
-$patterns = @('AIza[0-9A-Za-z_-]{20,}', 'gsk_[0-9A-Za-z_-]{20,}', 'sk-[0-9A-Za-z_-]{20,}', '(?i)LIVEKIT_API_SECRET[ \t]*=[ \t]*[^\r\n\s$]{8,}', '(?i)SARVAM_API_KEY[ \t]*=[ \t]*[^\r\n\s$]{8,}', '(?i)GEMINI_API_KEY[ \t]*=[ \t]*[^\r\n\s$]{8,}', '(?i)GROQ_API_KEY[ \t]*=[ \t]*[^\r\n\s$]{8,}', '(?i)SUPABASE_SERVICE_ROLE_KEY[ \t]*=[ \t]*[^\r\n\s$]{8,}')
+$patterns = @('AIza[0-9A-Za-z_-]{20,}', 'gsk_[0-9A-Za-z_-]{20,}', 'sk-[0-9A-Za-z_-]{20,}', 'LIVEKIT_API_SECRET[ =]+[A-Za-z0-9_-]{8,}', 'SARVAM_API_KEY[ =]+[A-Za-z0-9_-]{8,}', 'GEMINI_API_KEY[ =]+[A-Za-z0-9_-]{8,}', 'GROQ_API_KEY[ =]+[A-Za-z0-9_-]{8,}', 'SUPABASE_SERVICE_ROLE_KEY[ =]+[A-Za-z0-9_-]{8,}')
 $regex = ($patterns -join '|')
 $gitArgs = @('-c', "safe.directory=$((Get-Location).Path)")
 $hits = @()
@@ -12,11 +12,8 @@ foreach ($file in $tracked) {
 }
 $commits = git @gitArgs rev-list --all
 foreach ($commit in $commits) {
-  $files = git @gitArgs diff-tree --no-commit-id --name-only -r $commit
-  foreach ($file in $files) {
-    $content = git @gitArgs show "${commit}:$file" 2>$null
-    if ($LASTEXITCODE -eq 0 -and $content -match $regex) { $hits += "history:${commit}:$file" }
-  }
+  $matches = git @gitArgs grep -I -i -l -E $regex $commit -- 2>$null
+  foreach ($file in $matches) { $hits += "history:${commit}:$file" }
 }
 if ($hits.Count -gt 0) {
   $hits | Sort-Object -Unique | ForEach-Object { Write-Output $_ }
