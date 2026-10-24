@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "customer_intent": "ORDER_TRACKING",
+  "order_id": "ORD-101",
+  "policy_outcome": "NONE",
+  "call_summary": "The order status was provided.",
+  "follow_up_needed": false
+}

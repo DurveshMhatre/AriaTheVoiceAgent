@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aura.example/contracts/tool_schemas.json",
+  "title": "Tool Schemas",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "tools"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "tools": { "type": "array", "minItems": 4, "items": { "$ref": "#/$defs/tool" } }
+  },
+  "$defs": {
+    "tool": {
+      "type": "object", "additionalProperties": false,
+      "required": ["name", "description", "input_schema"],
+      "properties": {
+        "name": { "type": "string", "enum": ["get_order_details", "check_return_eligibility", "cancel_order", "escalate_to_human"] },
+        "description": { "type": "string", "minLength": 1 },
+        "input_schema": { "$ref": "#/$defs/input_schema" },
+        "requires_confirmation": { "type": "boolean" },
+        "timeout_ms": { "type": "integer", "minimum": 100, "maximum": 30000 }
+      }
+    },
+    "input_schema": {
+      "type": "object", "additionalProperties": false,
+      "required": ["type", "properties", "additionalProperties"],
+      "properties": {
+        "type": { "const": "object" },
+        "properties": { "type": "object" },
+        "required": { "type": "array", "items": { "type": "string" } },
+        "additionalProperties": { "const": false }
+      }
+    },
+    "tool_result": {
+      "type": "object", "additionalProperties": false,
+      "required": ["ok", "data", "error_code", "speakable_hint"],
+      "properties": {
+        "ok": { "type": "boolean" },
+        "data": { "type": ["object", "array", "string", "number", "boolean", "null"] },
+        "error_code": { "type": ["string", "null"], "enum": ["INVALID_FORMAT", "NOT_FOUND", "NOT_ELIGIBLE", "TIMEOUT", "INTERNAL", null] },
+        "speakable_hint": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

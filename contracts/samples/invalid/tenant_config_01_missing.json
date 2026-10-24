@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "tenant_id": "aura",
+  "brand": {
+    "name": "Aura Skincare",
+    "description": "Premium organic Indian skincare.",
+    "support_email": "PLACEHOLDER",
+    "support_phone": "PLACEHOLDER",
+    "support_url": "PLACEHOLDER",
+    "contact_verified": false
+  },
+  "persona": {
+    "name": "Aria",
+    "role": "support specialist",
+    "style": "concise"
+  },
+  "knowledge": [
+    {
+      "topic": "brand",
+      "content": "Premium organic Indian skincare."
+    }
+  ],
+  "policies": {
+    "free_shipping_threshold_inr": 499,
+    "free_shipping_rule": "above",
+    "shipping_fee_inr": 50,
+    "standard_delivery_business_days": [
+      3,
+      5
+    ],
+    "return_window_days": 7,
+    "damage_report_window_hours": 48,
+    "cod_limit_inr": 2500,
+    "cod_limit_inclusive": true,
+    "cancellable_status": "Processing",
+    "id_format": "ORD-###"
+  },
+  "enabled_tools": [
+    "get_order_details",
+    "check_return_eligibility",
+    "cancel_order",
+    "escalate_to_human"
+  ],
+  "voice": {
+    "default_voice_mode": "mock",
+    "provider": "sarvam",
+    "model": "bulbul:v3",
+    "speaker": "PLACEHOLDER"
+  },
+  "language": {
+    "default": "en-IN",
+    "allowed": [
+      "en-IN"
+    ]
+  },
+  "caps": {
+    "max_call_duration_seconds": 300,
+    "idle_timeout_seconds": 45,
+    "max_concurrent_calls": 4,
+    "per_user_daily_calls": 10
+  }
+}

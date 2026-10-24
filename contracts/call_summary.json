@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aura.example/contracts/call_summary.json",
+  "title": "Call Summary",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "customer_intent", "order_id", "resolution_status", "policy_outcome", "call_summary", "follow_up_needed"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "customer_intent": { "type": "string", "enum": ["ORDER_TRACKING", "RETURN_REQUEST", "CANCELLATION", "SHIPPING_INFO", "COD_INFO", "PRODUCT_INFO", "COMPLAINT", "OUT_OF_SCOPE", "OTHER"] },
+    "order_id": { "type": ["string", "null"], "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{1,63}$" },
+    "resolution_status": { "type": "string", "enum": ["RESOLVED", "PARTIALLY_RESOLVED", "UNRESOLVED", "ESCALATED", "OUT_OF_SCOPE"] },
+    "policy_outcome": { "type": ["string", "null"], "enum": ["RETURN_WINDOW_EXPIRED", "ITEM_OPENED", "RETURN_ELIGIBLE", "NOT_YET_DELIVERED", "CANCEL_ALLOWED", "CANCEL_BLOCKED_SHIPPED", "COD_ELIGIBLE", "COD_BLOCKED_LIMIT", "SHIPPING_FREE", "SHIPPING_FEE_APPLIES", "NONE", null] },
+    "call_summary": { "type": "string", "minLength": 1, "maxLength": 1000 },
+    "follow_up_needed": { "type": "boolean" }
+  }
+}

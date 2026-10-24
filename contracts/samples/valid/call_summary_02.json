@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "customer_intent": "OTHER",
+  "order_id": null,
+  "resolution_status": "RESOLVED",
+  "policy_outcome": "NONE",
+  "call_summary": "The order status was provided.",
+  "follow_up_needed": false
+}

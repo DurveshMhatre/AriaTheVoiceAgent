@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aura.example/contracts/call_events.json",
+  "title": "Call Event",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "event_id", "call_id", "tenant_id", "event_type", "occurred_at", "sequence", "data"],
+  "properties": { "schema_version": { "const": 1 }, "event_id": { "type": "string", "minLength": 1 }, "call_id": { "type": "string", "minLength": 1 }, "turn_id": { "type": ["string", "null"] }, "tenant_id": { "type": "string", "minLength": 1 }, "event_type": { "type": "string" }, "occurred_at": { "type": "string", "format": "date-time" }, "sequence": { "type": "integer", "minimum": 0 }, "data": { "type": "object" } },
+  "oneOf": [
+    { "$ref": "#/$defs/state_changed" }, { "$ref": "#/$defs/transcript_turn" }, { "$ref": "#/$defs/tool_called" }, { "$ref": "#/$defs/tool_result" }, { "$ref": "#/$defs/interrupted" }, { "$ref": "#/$defs/provider_failover" }, { "$ref": "#/$defs/usage_tick" }, { "$ref": "#/$defs/error" }, { "$ref": "#/$defs/guardrail_triggered" }, { "$ref": "#/$defs/call_ended" }
+  ],
+  "$defs": {
+    "base": { "type": "object", "required": ["event_type", "turn_id", "data"] },
+    "state_changed": { "allOf": [{ "$ref": "#/$defs/base" }, { "properties": { "event_type": { "const": "state_changed" }, "turn_id": { "type": "string" }, "data": { "type": "object", "additionalProperties": false, "required": ["state"], "properties": { "state": { "enum": ["CONNECTING", "LISTENING", "THINKING", "SPEAKING", "ENDED"] } } } } }] },
+    "transcript_turn": { "allOf": [{ "$ref": "#/$defs/base" }, { "properties": { "event_type": { "const": "transcript_turn" }, "turn_id": { "type": "string" }, "data": { "$ref": "#/$defs/turn_data" } } }] },
+    "tool_called": { "allOf": [{ "$ref": "#/$defs/base" }, { "properties": { "event_type": { "const": "tool_called" }, "turn_id": { "type": "string" }, "data": { "type": "object", "additionalProperties": false, "required": ["tool_name", "arguments"], "properties": { "tool_name": { "type": "string" }, "arguments": { "type": "object" } } } } }] },
+    "tool_result": { "allOf": [{ "$ref": "#/$defs/base" }, { "properties": { "event_type": { "const": "tool_result" }, "turn_id": { "type": "string" }, "data": { "type": "object", "additionalProperties": false, "required": ["tool_name", "ok"], "properties": { "tool_name": { "type": "string" }, "ok": { "type": "boolean" }, "error_code": { "type": ["string", "null"] } } } } }] },
+    "interrupted": { "allOf": [{ "$ref": "#/$defs/base" }, { "properties": { "event_type": { "const": "interrupted" }, "turn_id": { "type": "string" }, "data": { "type": "object", "additionalProperties": false, "required": ["spoken_text"], "properties": { "spoken_text": { "type": "string" } } } } }] },
+    "provider_failover": { "allOf": [{ "$ref": "#/$defs/base" }, { "properties": { "event_type": { "const": "provider_failover" }, "turn_id": { "type": ["string", "null"] }, "data": { "type": "object", "additionalProperties": false, "required": ["kind", "from_provider", "to_provider"], "properties": { "kind": { "enum": ["stt", "llm", "tts"] }, "from_provider": { "type": "string" }, "to_provider": { "type": "string" } } } } }] },
+    "usage_tick": { "allOf": [{ "$ref": "#/$defs/base" }, { "properties": { "event_type": { "const": "usage_tick" }, "turn_id": { "type": ["string", "null"] }, "data": { "type": "object", "additionalProperties": false, "required": ["agent_seconds"], "properties": { "agent_seconds": { "type": "number", "minimum": 0 } } } } }] },
+    "error": { "allOf": [{ "$ref": "#/$defs/base" }, { "properties": { "event_type": { "const": "error" }, "turn_id": { "type": ["string", "null"] }, "data": { "type": "object", "additionalProperties": false, "required": ["code", "message"], "properties": { "code": { "type": "string" }, "message": { "type": "string" } } } } }] },
+    "guardrail_triggered": { "allOf": [{ "$ref": "#/$defs/base" }, { "properties": { "event_type": { "const": "guardrail_triggered" }, "turn_id": { "type": "string" }, "data": { "type": "object", "additionalProperties": false, "required": ["rule"], "properties": { "rule": { "type": "string" } } } } }] },
+    "call_ended": { "allOf": [{ "$ref": "#/$defs/base" }, { "properties": { "event_type": { "const": "call_ended" }, "turn_id": { "type": ["string", "null"] }, "data": { "type": "object", "additionalProperties": false, "required": ["reason"], "properties": { "reason": { "type": "string" } } } } }] },
+    "turn_data": { "type": "object", "additionalProperties": false, "required": ["speaker", "text", "stt_final_ms", "llm_first_token_ms", "tts_first_byte_ms", "end_to_end_ms"], "properties": { "speaker": { "enum": ["user", "assistant"] }, "text": { "type": "string" }, "stt_final_ms": { "type": ["integer", "null"], "minimum": 0 }, "llm_first_token_ms": { "type": ["integer", "null"], "minimum": 0 }, "tts_first_byte_ms": { "type": ["integer", "null"], "minimum": 0 }, "end_to_end_ms": { "type": ["integer", "null"], "minimum": 0 } } }
+  }
+}

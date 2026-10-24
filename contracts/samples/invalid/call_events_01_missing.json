@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "event_id": "evt-1",
+  "call_id": "call-1",
+  "turn_id": "turn-1",
+  "tenant_id": "aura",
+  "occurred_at": "2026-10-25T00:00:00Z",
+  "sequence": 1,
+  "data": {
+    "speaker": "user",
+    "text": "Where is my order?",
+    "stt_final_ms": 100,
+    "llm_first_token_ms": 200,
+    "tts_first_byte_ms": 300,
+    "end_to_end_ms": 400
+  }
+}

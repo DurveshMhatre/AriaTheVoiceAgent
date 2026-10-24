@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "customer_intent": "UNKNOWN",
+  "order_id": "ORD-101",
+  "resolution_status": "RESOLVED",
+  "policy_outcome": "NONE",
+  "call_summary": "The order status was provided.",
+  "follow_up_needed": false
+}
