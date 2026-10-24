@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from dataclasses import asdict
 from typing import Any
 
 from .ids import normalize_order_id
@@ -59,6 +58,7 @@ class ToolDispatcher:
         if not self._confirmed(normalized):
             return result(False, error_code="ID_NOT_CONFIRMED", speakable_hint="Please confirm the order ID first.")
         if self.state.pending_action != f"cancel:{normalized}":
+            self.state.pending_action = f"cancel:{normalized}"
             return result(False, error_code="MISSING_ARGUMENT", speakable_hint="Please confirm that you want to cancel it.")
         order = self.repo.get(normalized)
         if order is None:

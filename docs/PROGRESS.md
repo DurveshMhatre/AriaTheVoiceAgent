@@ -38,6 +38,14 @@ The environment checker now detects declared variable names in the local `.env` 
 
 Implemented foundations: injectable IST clock, relative-date in-memory orders, tenant loader, order-ID normalization, English/Romanized-Hindi yes/no classification, deterministic policy functions, confirmation-aware tools, serializable call state, prompt builder, output guardrails, deterministic summary fallback, provider breaker/resolver seams, MockLLM, and initial unit tests.
 
-Not yet complete or verified: provider integration against live SDKs, complete streaming turn/tool loop, full CLI commands, all required eval scenarios, coverage run, live eval, and the remaining Phase 1 ADRs. No audio, LiveKit, web UI, database, or deployment was added.
+Not yet complete or verified: provider integration against live SDKs, Python test execution, coverage run, live eval, and final contract-conformance checks. No audio, LiveKit, web UI, database, or deployment was added.
 
 Additional Phase 1 work: lazy Gemini and Groq adapter modules, provider-neutral message types, model resolver, circuit breaker tests, mock-first factory, text CLI provider selection, initial scripted scenario YAML, and a quota-safe scripted runner placeholder. These files have not been executed because Python is not installed on this desktop; no test or coverage pass is claimed.
+
+## Phase 1 completion segment
+
+Implemented the bounded async tool-call turn loop with a three-round tool limit, eight-second turn deadline, filler events before tools, structured tool results, ID confirmation, explicit cancellation confirmation, per-sentence output validation, escalation fallback, and `commit_spoken` interruption handling.
+
+The CLI now supports `/state`, `/events`, `/summary`, `/usage`, `/orders`, `/reset`, and `/quit`. The scripted eval suite now contains the required core, policy, privacy, out-of-scope, injection, escalation, unknown-information, and misbehaving-model scenarios. The runner writes gitignored JSON results and reports pass/fail, tool calls, and quota usage.
+
+Verification performed in this segment: contract JSON parsing and whitespace checks passed; the full-history secret scan passed. Python unit tests, mypy, Ruff, and the scripted runner remain unexecuted because no Python runtime is installed. No live provider calls were made.

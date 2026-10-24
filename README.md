@@ -24,6 +24,23 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/secret_scan.ps1
 
 It checks tracked working-tree files and every reachable Git commit, and prints only filenames or a pass count.
 
+## Phase 1 text mode
+
+From PowerShell:
+
+```powershell
+Set-Location apps/agent
+python -m brain.cli --tenant aura --llm mock
+```
+
+The CLI supports `/state`, `/events`, `/summary`, `/usage`, `/orders`, `/reset`, and `/quit`. Run the deterministic evaluation suite from the repository root with:
+
+```powershell
+python evals/runner/runner.py --mode scripted
+```
+
+The scripted suite never calls Gemini or Groq and writes its JSON report under the gitignored `evals/results/` directory.
+
 ## How I think about the system
 
 1. The Brain is separate from audio so policy and guardrails can be tested cheaply.
