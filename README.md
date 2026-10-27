@@ -105,3 +105,4 @@ The intended hosting split is Vercel for the Next.js web app and LiveKit Cloud f
 - [Plain-language explainer](docs/EXPLAINER.md)
 - [Supabase setup runbook](docs/RUNBOOK_SUPABASE.md)
 - [Real voice call runbook](docs/RUNBOOK_REAL_CALL.md)
+- [Assessment demo video guide and approach note](docs/DEMO_VIDEO_GUIDE.md)

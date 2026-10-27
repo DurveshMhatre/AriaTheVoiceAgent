@@ -262,3 +262,19 @@ Diagnosis and fix prepared locally:
 - Added runtime root discovery for both the repository checkout and the deployed `/app` layout. `TenantConfigLoader` now supports either `apps/agent/tenants` or packaged `tenants` paths.
 - Added a packaged copy of `tenant_config.json` beside the Aura tenant seed so runtime schema validation remains enabled in the LiveKit build context. Its SHA-256 matches the canonical `contracts/tenant_config.json` at authoring time.
 - This workspace cannot launch its configured `lk.exe` shim, so deployment and post-deploy session verification remain pending. The separate Supabase usage-meter RPC error also remains to be confirmed after secrets update.
+
+## Assessment demo package — plan before writing
+
+The owner needs a 3–5 minute video demonstrating a working voice call, an order lookup, a policy conversation, the post-call transcript and summary, and a brief architecture walkthrough, plus a 2–3 sentence approach note.
+
+Plan and acceptance criteria:
+
+- Create a timed recording script that uses the app's real UI and confirmation flow, including a safe cancellation refusal on ORD-101.
+- Add pre-recording checks and explicit instructions for displaying the post-call transcript/summary without exposing credentials or real personal data.
+- Include an architecture diagram and short spoken walkthrough that match the current implementation and clearly state demo limitations.
+- Provide a standalone three-sentence approach note suitable for submission.
+
+Completed:
+
+- Added `docs/DEMO_VIDEO_GUIDE.md` with recording preflight, a timed 4:20 script, spoken ORD-101 lookup and safe cancellation refusal, a post-call transcript/summary segment, an architecture diagram/talk track, and the three-sentence approach note.
+- Linked the guide from README. No app behavior or quota limits were changed.
