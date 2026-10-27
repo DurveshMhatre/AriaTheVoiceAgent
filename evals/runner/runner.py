@@ -56,7 +56,7 @@ async def run_one(config: dict[str, Any], scenario: dict[str, Any]) -> dict[str,
     return {"id": scenario["id"], "passed": not failures, "failures": failures, "tools": tool_names, "transcript": sentences, "events": events}
 
 
-async def main_async(mode: str, max_calls: int) -> int:
+async def main_async(mode: str, max_calls: int, results_dir: Path | None = None) -> int:
     if mode == "live":
         print("live mode is intentionally blocked in the scripted runner; use a separately approved capped live command")
         return 2
@@ -69,7 +69,7 @@ async def main_async(mode: str, max_calls: int) -> int:
         detail = "; ".join(item["failures"])
         print(f"{status} {item['id']} tools={','.join(item['tools']) or '-'} {detail}".rstrip())
     print(f"SUMMARY mode=scripted passed={passed} failed={len(results) - passed} total={len(results)} quota_calls=0 max_calls={max_calls}")
-    result_dir = ROOT / "evals" / "results"
+    result_dir = results_dir or ROOT / "evals" / "results"
     result_dir.mkdir(parents=True, exist_ok=True)
     (result_dir / "scripted-latest.json").write_text(__import__("json").dumps(results, indent=2), encoding="utf-8")
     return 0 if passed == len(results) else 1
@@ -79,8 +79,9 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--mode", choices=["scripted", "live"], default="scripted")
     parser.add_argument("--max-calls", type=int, default=80)
+    parser.add_argument("--results-dir", type=Path, default=None)
     args = parser.parse_args()
-    raise SystemExit(asyncio.run(main_async(args.mode, args.max_calls)))
+    raise SystemExit(asyncio.run(main_async(args.mode, args.max_calls, args.results_dir)))
 
 
 if __name__ == "__main__":

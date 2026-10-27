@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+
+<html class="" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ARIA // VOICE OS — Operator Ingress</title>
+<!-- Google Fonts: Geist & JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with Forms and Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration Verbatim -->
+<script id="tailwind-config">tailwind.config = {darkMode: "class", theme: {extend: {colors: {"outline-variant": "#d0d2dc", "on-surface-variant": "#585a68", "surface-container-lowest": "#f0f2f8", "tertiary-fixed-dim": "#c4b5fd", "secondary-fixed": "#d8dae6", tertiary: "#7c3aed", primary: "#6366f1", "on-primary-container": "#e0e2ff", "surface-variant": "#dcdee4", "secondary-container": "#d8dae6", "on-tertiary-fixed-variant": "#5b21b6", "inverse-on-surface": "#e8eaf0", "on-secondary-container": "#585a68", "surface-container-highest": "#d6d8de", "on-error": "#ffffff", "on-tertiary-fixed": "#2e1065", "tertiary-container": "#a78bfa", outline: "#8a8c9a", "on-tertiary-container": "#3b1f63", "on-primary-fixed-variant": "#4338ca", background: "#e8eaf0", "on-primary": "#ffffff", "surface-tint": "#6366f1", "on-secondary-fixed-variant": "#404252", "on-secondary-fixed": "#1a1b26", error: "#dc2626", "surface-container-low": "#e5e7ed", secondary: "#6c6e7e", "primary-fixed": "#e0e2ff", "error-container": "#fee2e2", "surface-container": "#e2e4ea", "inverse-surface": "#2e3040", "surface-bright": "#edeef4", "on-primary-fixed": "#1e1b4b", "surface-dim": "#d4d6dc", "on-error-container": "#991b1b", surface: "#e8eaf0", "tertiary-fixed": "#ede9fe", "on-secondary": "#ffffff", "inverse-primary": "#a5b4fc", "primary-fixed-dim": "#a5b4fc", "primary-container": "#818cf8", "on-tertiary": "#ffffff", "on-surface": "#2e3040", "on-background": "#2e3040", "surface-container-high": "#dcdee4", "secondary-fixed-dim": "#b8baca"}, borderRadius: {DEFAULT: "0.5rem", lg: "1rem", xl: "1.5rem", full: "9999px"}, spacing: {gutter: "1rem", "gutter-lg": "1.5rem", "gutter-sm": "0.75rem", "space-xl": "2rem", margin: "1.5rem", "margin-sm": "1rem", "space-md": "0.75rem", "space-xs": "0.25rem", "space-lg": "1.25rem", "space-sm": "0.5rem", "margin-lg": "2rem"}, fontFamily: {"body-sm": ["JetBrains Mono"], "headline-md": ["Geist"], "headline-lg-mobile": ["Geist"], "body-md": ["JetBrains Mono"], "headline-xl": ["Geist"], "telemetry-num": ["JetBrains Mono"], "headline-xl-mobile": ["Geist"], "label-md": ["JetBrains Mono"], "headline-lg": ["Geist"], "label-sm": ["JetBrains Mono"], "body-lg": ["JetBrains Mono"], "headline-sm": ["Geist"], headline: ["Plus Jakarta Sans"], display: ["Plus Jakarta Sans"], body: ["Plus Jakarta Sans"], label: ["Plus Jakarta Sans"]}, fontSize: {"body-sm": ["12px", {lineHeight: "18px", letterSpacing: "0em", fontWeight: "400"}], "headline-md": ["20px", {lineHeight: "28px", letterSpacing: "-0.015em", fontWeight: "500"}], "headline-lg-mobile": ["22px", {lineHeight: "28px", letterSpacing: "-0.015em", fontWeight: "600"}], "body-md": ["13px", {lineHeight: "20px", letterSpacing: "0em", fontWeight: "400"}], "headline-xl": ["40px", {lineHeight: "48px", letterSpacing: "-0.03em", fontWeight: "600"}], "telemetry-num": ["14px", {lineHeight: "18px", letterSpacing: "-0.02em", fontWeight: "500"}], "headline-xl-mobile": ["28px", {lineHeight: "34px", letterSpacing: "-0.02em", fontWeight: "600"}], "label-md": ["11px", {lineHeight: "16px", letterSpacing: "0.04em", fontWeight: "500"}], "headline-lg": ["28px", {lineHeight: "36px", letterSpacing: "-0.02em", fontWeight: "600"}], "label-sm": ["10px", {lineHeight: "14px", letterSpacing: "0.06em", fontWeight: "600"}], "body-lg": ["15px", {lineHeight: "24px", letterSpacing: "-0.01em", fontWeight: "400"}], "headline-sm": ["16px", {lineHeight: "24px", letterSpacing: "-0.01em", fontWeight: "500"}]}}}};</script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    /* Technical hairline grid backdrop */
+    .bg-tech-grid {
+      background-size: 32px 32px;
+      background-image: 
+        linear-gradient(to right, rgba(60, 73, 77, 0.12) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(60, 73, 77, 0.12) 1px, transparent 1px);
+    }
+    /* Custom non-intrusive focus style */
+    .field-input:focus {
+      outline: none;
+      border-color: #cef833 !important;
+      box-shadow: 0 0 0 1px #cef833;
+    }
+  </style>
+</head>
+<body class="bg-surface-container-lowest text-on-surface min-h-screen flex flex-col justify-between selection:bg-secondary selection:text-surface-container-lowest antialiased font-body-md text-body-md">
+<!-- Top System Header Bar (Strictly minimal ingress telemetry anchor) -->
+<header class="w-full border-b border-outline-variant/40 bg-surface-container-lowest/90 px-margin sm:px-margin-lg py-space-sm flex items-center justify-between z-20">
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-space-xs text-on-surface">
+<span class="w-2 h-2 rounded-none bg-secondary animate-pulse inline-block"></span>
+<span class="font-headline-sm text-headline-sm font-bold tracking-tight text-on-surface">ARIA</span>
+<span class="text-outline-variant font-body-sm text-body-sm">//</span>
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">VOICE OS</span>
+</div>
+<div class="hidden sm:inline-flex items-center gap-space-xs border border-outline-variant/30 px-space-xs py-0.5 rounded bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm">
+<span class="text-secondary">●</span>
+<span>GATEWAY: US-EAST-01</span>
+</div>
+</div>
+<div class="flex items-center gap-space-md text-on-surface-variant font-label-md text-label-md">
+<div class="hidden md:flex items-center gap-space-sm font-label-sm text-label-sm text-on-surface-variant/80">
+<span>TLS 1.3</span>
+<span>·</span>
+<span>48kHz OPUS</span>
+<span>·</span>
+<span class="text-primary-container">RTT: 18ms</span>
+</div>
+<div class="flex items-center gap-space-xs border border-outline-variant/40 px-space-sm py-1 rounded bg-surface-container-low">
+<span class="material-outlined text-outline-variant text-[14px]">terminal</span>
+<span class="font-label-sm text-label-sm text-on-surface">NODE_INGRESS_v2.4</span>
+</div>
+</div>
+</header>
+<!-- Main Canvas Section with Tech Grid Bed -->
+<main class="flex-1 w-full flex items-center justify-center p-gutter sm:p-gutter-lg bg-tech-grid relative overflow-hidden">
+<!-- Subtle technical coordinates marks in four corners -->
+<div class="pointer-events-none absolute top-4 left-6 font-label-sm text-label-sm text-outline-variant/40 tracking-widest hidden md:block">
+      LAT: 38.8951° N // LON: 77.0364° W [CLUSTER_INDEX: 0x94F]
+    </div>
+<div class="pointer-events-none absolute bottom-4 right-6 font-label-sm text-label-sm text-outline-variant/40 tracking-widest hidden md:block">
+      SYS_CLOCK: SYNCHRONIZED [GPS_PPS]
+    </div>
+<!-- Dual Column Bento / Console Architecture Frame -->
+<div class="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-12 border border-outline-variant/50 bg-surface-container-low/95 shadow-none rounded relative z-10 overflow-hidden my-space-md">
+<!-- LEFT COLUMN: Product Identity, Signal Telemetry, Acoustic Waveform Motif (lg:col-span-5) -->
+<section class="lg:col-span-5 border-b lg:border-b-0 lg:border-r border-outline-variant/50 p-space-lg sm:p-space-xl flex flex-col justify-between bg-surface-container-lowest/80">
+<div class="space-y-space-lg">
+<!-- Engineered Brand Cluster -->
+<div>
+<div class="inline-flex items-center gap-space-xs px-2 py-0.5 border border-secondary/40 bg-secondary/5 text-secondary font-label-sm text-label-sm uppercase tracking-wider mb-space-sm rounded">
+<span class="w-1.5 h-1.5 bg-secondary"></span>
+              REAL-TIME RUNTIME MATRIX
+            </div>
+<h1 class="font-headline-lg text-headline-lg sm:font-headline-xl sm:text-headline-xl font-bold tracking-tight text-on-surface">
+              ARIA
+            </h1>
+<p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mt-0.5">
+              VOICE OS // OPERATOR CONSOLE
+            </p>
+<p class="font-body-md text-body-md text-on-surface-variant mt-space-md leading-relaxed border-l border-outline-variant/60 pl-space-sm">
+              Engineered infrastructure for autonomous real-time voice agents and ultra-low latency duplex acoustic pipelines.
+            </p>
+</div>
+<!-- Technical Sound Wave Harmonic Spectrum Line Diagram (Precision SVG Vector) -->
+<div class="border border-outline-variant/40 rounded p-space-sm bg-surface-container-lowest relative">
+<div class="flex items-center justify-between font-label-sm text-label-sm text-on-surface-variant pb-space-xs border-b border-outline-variant/30 mb-space-xs">
+<span class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 bg-primary-container"></span>
+                DUPLEX SPECTRAL MONITOR
+              </span>
+<span class="font-telemetry-num text-telemetry-num text-secondary">48.0 kS/s</span>
+</div>
+<!-- Precision Razor Waveform Graphic (Custom SVG Line Art, Zero Iridescent Orbs) -->
+<div class="h-28 w-full flex items-center justify-center relative overflow-hidden bg-surface-container-lowest py-1">
+<!-- Background reference dB dashed lines -->
+<div class="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-20 py-2">
+<div class="w-full border-b border-dashed border-outline-variant flex justify-between text-[9px] font-label-sm px-1 text-on-surface-variant">
+<span>+0dB</span><span>PEAK</span>
+</div>
+<div class="w-full border-b border-dashed border-outline-variant flex justify-between text-[9px] font-label-sm px-1 text-on-surface-variant">
+<span>-6dB</span><span>REF</span>
+</div>
+<div class="w-full border-b border-dashed border-outline-variant flex justify-between text-[9px] font-label-sm px-1 text-on-surface-variant">
+<span>-18dB</span><span>RMS</span>
+</div>
+</div>
+<!-- Razor 1px vector traces for Input (Secondary Lime) and Output (Primary Teal) -->
+<svg class="w-full h-full relative z-10" fill="none" preserveaspectratio="none" viewbox="0 0 320 80" xmlns="http://www.w3.org/2000/svg">
+<!-- Acoustic In: Hard geometric harmonic waveform -->
+<path d="M0 40 L20 40 L35 34 L50 48 L65 22 L80 58 L95 18 L110 62 L125 30 L140 46 L155 38 L170 42 L185 28 L200 52 L215 15 L230 65 L245 25 L260 50 L275 36 L290 44 L305 40 L320 40" stroke="#cef833" stroke-linecap="square" stroke-width="1.25" vector-effect="non-scaling-stroke"></path>
+<!-- Acoustic Out / Synthesized agent trace: Complementary razor line -->
+<path d="M0 40 L15 40 L30 43 L45 36 L60 45 L75 32 L90 48 L105 34 L120 44 L135 24 L150 56 L165 20 L180 58 L195 32 L210 46 L225 38 L240 42 L255 35 L270 42 L285 39 L300 40 L320 40" stroke="#42d3f5" stroke-dasharray="2 1" stroke-linecap="square" stroke-width="1" vector-effect="non-scaling-stroke"></path>
+<!-- Current packet cursor tick -->
+<line stroke="#e2e2e5" stroke-opacity="0.4" stroke-width="1" x1="215" x2="215" y1="5" y2="75"></line>
+<rect fill="#cef833" height="4" width="4" x="213" y="13"></rect>
+</svg>
+</div>
+<!-- Signal specification metadata footer in widget -->
+<div class="flex items-center justify-between text-[10px] font-label-sm text-outline-variant pt-space-xs border-t border-outline-variant/30">
+<span class="flex items-center gap-1">
+<span class="w-1.5 h-0.5 bg-secondary inline-block"></span> CH_01: RX (VOICE)
+              </span>
+<span class="flex items-center gap-1">
+<span class="w-1.5 h-0.5 bg-primary-container inline-block"></span> CH_02: SYNTH_OUT
+              </span>
+<span class="text-on-surface-variant font-telemetry-num">JITTER: 0.8ms</span>
+</div>
+</div>
+<!-- Architectural Specifications Checklist -->
+<div class="space-y-space-xs font-body-sm text-body-sm text-on-surface-variant">
+<div class="flex items-center gap-space-sm py-1 border-b border-outline-variant/20">
+<span class="material-symbols-outlined text-[16px] text-secondary">check_circle</span>
+<span class="text-on-surface">Dual-Channel Full-Duplex Spectrum</span>
+</div>
+<div class="flex items-center gap-space-sm py-1 border-b border-outline-variant/20">
+<span class="material-symbols-outlined text-[16px] text-secondary">check_circle</span>
+<span>Sub-120ms End-to-End Latency Target</span>
+</div>
+<div class="flex items-center gap-space-sm py-1 border-b border-outline-variant/20">
+<span class="material-symbols-outlined text-[16px] text-secondary">check_circle</span>
+<span>AES-256-GCM Transport Layer Security</span>
+</div>
+<div class="flex items-center gap-space-sm py-1">
+<span class="material-symbols-outlined text-[16px] text-secondary">check_circle</span>
+<span>Deterministic Turn-Taking State Machine</span>
+</div>
+</div>
+</div>
+<!-- Telemetry Status Ribbon -->
+<div class="mt-space-lg pt-space-md border-t border-outline-variant/40 flex items-center justify-between font-label-sm text-label-sm text-on-surface-variant">
+<div class="flex items-center gap-1.5">
+<span class="text-outline">ENV:</span>
+<span class="text-on-surface font-semibold">PRODUCTION-CLUSTER</span>
+</div>
+<div class="flex items-center gap-1 text-primary-container">
+<span class="material-symbols-outlined text-[14px]">shield</span>
+<span>SEC_LVL: ENTERPRISE</span>
+</div>
+</div>
+</section>
+<!-- RIGHT COLUMN: Engineered Operator Authentication Form (lg:col-span-7) -->
+<section class="lg:col-span-7 p-space-lg sm:p-space-xl flex flex-col justify-between bg-surface-container-low">
+<div>
+<!-- Header Area -->
+<div class="flex items-start justify-between border-b border-outline-variant/40 pb-space-md mb-space-lg">
+<div>
+<div class="flex items-center gap-space-xs">
+<span class="w-1.5 h-3 bg-secondary inline-block"></span>
+<h2 class="font-headline-md text-headline-md font-semibold tracking-tight text-on-surface">
+                  Operator Ingress
+                </h2>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant mt-1">
+                Authenticate node credentials to connect control carrier.
+              </p>
+</div>
+<div class="text-right">
+<span class="px-space-xs py-0.5 border border-outline-variant/50 text-[10px] font-label-sm text-on-surface-variant rounded bg-surface-container">
+                PORT 443 / WSS
+              </span>
+</div>
+</div>
+<!-- Inline Technical System Diagnostic / Error Alert Box (Engineered styling) -->
+<div class="mb-space-lg p-space-sm border border-outline-variant/60 bg-surface-container rounded flex items-start gap-space-sm transition-all duration-150" id="statusAlert">
+<span class="material-symbols-outlined text-[18px] text-primary-container mt-0.5">verified_user</span>
+<div class="flex-1">
+<div class="font-label-md text-label-md text-on-surface font-medium">SYSTEM READY // SECURE RUNTIME</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                Mutual TLS handshake verified. Node isolation container waiting for engineer access key.
+              </p>
+</div>
+<span class="font-telemetry-num text-[11px] text-outline-variant">ID: 0x88F</span>
+</div>
+<!-- Authentication Form -->
+<form class="space-y-space-md" id="loginForm" onsubmit="handleSessionSubmit(event)">
+<!-- Field 1: Operator Email / Identity Key -->
+<div>
+<div class="flex justify-between items-center mb-space-xs">
+<label class="font-label-md text-label-md text-on-surface uppercase tracking-wide flex items-center gap-1.5" for="operatorEmail">
+<span>Operator Email</span>
+<span class="text-secondary font-bold">*</span>
+</label>
+<span class="font-label-sm text-label-sm text-outline-variant">FORMAT: RFC-5322</span>
+</div>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-space-sm flex items-center pointer-events-none text-outline-variant">
+<span class="material-symbols-outlined text-[18px]">account_circle</span>
+</div>
+<input class="field-input w-full bg-surface-container-lowest border border-outline-variant/60 rounded py-2 pl-9 pr-space-md text-on-surface font-body-md text-body-md placeholder:text-outline-variant transition-colors" id="operatorEmail" placeholder="operator@domain.aria" required="" type="email" value="operator.alpha@aria-telemetry.internal"/>
+</div>
+<div class="flex items-center justify-between mt-1 text-[11px] font-label-sm text-on-surface-variant">
+<span>Domain scope verified: internal cluster subnet</span>
+<span class="text-secondary flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[13px]">check</span> VALIDATED
+                </span>
+</div>
+</div>
+<!-- Field 2: Password / Access Secret -->
+<div>
+<div class="flex justify-between items-center mb-space-xs">
+<label class="font-label-md text-label-md text-on-surface uppercase tracking-wide flex items-center gap-1.5" for="accessSecret">
+<span>Password / Access Secret</span>
+<span class="text-secondary font-bold">*</span>
+</label>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-secondary transition-colors underline-offset-2 hover:underline" href="#reset">
+                  Forgot Secret Key?
+                </a>
+</div>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-space-sm flex items-center pointer-events-none text-outline-variant">
+<span class="material-symbols-outlined text-[18px]">key</span>
+</div>
+<input class="field-input w-full bg-surface-container-lowest border border-outline-variant/60 rounded py-2 pl-9 pr-10 text-on-surface font-body-md text-body-md placeholder:text-outline-variant transition-colors font-mono" id="accessSecret" placeholder="Enter 32-character node secret key" required="" type="password" value="••••••••••••••••"/>
+<!-- Visibility Toggle Button -->
+<button aria-label="Toggle password visibility" class="absolute inset-y-0 right-0 pr-space-sm flex items-center text-outline-variant hover:text-on-surface transition-colors" onclick="toggleSecretVisibility()" type="button">
+<span class="material-symbols-outlined text-[18px]" id="secretIcon">visibility</span>
+</button>
+</div>
+<!-- Input Diagnostics: Entropy meter and Caps-Lock Status -->
+<div class="flex items-center justify-between mt-1.5 text-[11px] font-label-sm">
+<div class="flex items-center gap-1.5 text-on-surface-variant">
+<span>ENTROPY:</span>
+<div class="flex gap-1">
+<span class="w-3 h-1 bg-secondary inline-block"></span>
+<span class="w-3 h-1 bg-secondary inline-block"></span>
+<span class="w-3 h-1 bg-secondary inline-block"></span>
+<span class="w-3 h-1 bg-outline-variant/50 inline-block"></span>
+</div>
+<span class="text-secondary">STRONG (192-BIT)</span>
+</div>
+<div class="hidden text-tertiary-fixed-dim items-center gap-1" id="capsIndicator">
+<span class="material-symbols-outlined text-[12px]">keyboard_capslock</span>
+<span>CAPS LOCK ON</span>
+</div>
+</div>
+</div>
+<!-- Session Persistence Options -->
+<div class="pt-space-xs flex items-center justify-between">
+<label class="flex items-center gap-space-sm cursor-pointer select-none">
+<input checked="" class="w-4 h-4 rounded-none bg-surface-container-lowest border-outline-variant text-secondary focus:ring-0 focus:ring-offset-0 focus:border-secondary cursor-pointer" type="checkbox"/>
+<span class="font-label-md text-label-md text-on-surface">Keep operator token hot (24h lease)</span>
+</label>
+<div class="font-label-sm text-label-sm text-outline-variant hidden sm:block">
+                ISOLATION: HW-BOUND
+              </div>
+</div>
+<!-- Primary Sign-In Action (High impact secondary lime with dark slate contrast) -->
+<div class="pt-space-sm">
+<button class="w-full bg-secondary hover:bg-secondary-fixed text-surface-container-lowest font-headline-sm text-headline-sm font-bold py-space-sm px-space-md rounded transition-colors flex items-center justify-center gap-space-sm focus:outline-none focus:ring-2 focus:ring-secondary/60 focus:ring-offset-2 focus:ring-offset-surface-container-lowest active:bg-secondary-fixed-dim" id="submitButton" type="submit">
+<span class="w-2 h-2 bg-surface-container-lowest inline-block"></span>
+<span class="tracking-tight uppercase">INITIALIZE SESSION // INGRESS</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</form>
+</div>
+<!-- Terminal Handshake Diagnostics (Lower panel) -->
+<div class="mt-space-lg pt-space-md border-t border-outline-variant/40">
+<div class="flex items-center justify-between text-outline-variant font-label-sm text-label-sm mb-1.5">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">hub</span>
+<span>CARRIER DAEMON ROUTE</span>
+</span>
+<span class="font-telemetry-num text-on-surface-variant">NODE_LAT: 12ms</span>
+</div>
+<div class="bg-surface-container-lowest p-2 border border-outline-variant/30 rounded font-body-sm text-[11px] text-on-surface-variant flex items-center justify-between">
+<span class="truncate">wss://gateway.us-east.aria.network:443/v2/stream?auth=bearer</span>
+<span class="text-secondary ml-2 whitespace-nowrap">STATUS: IDLE</span>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Restrained Minimal Footer (Strictly technical certification and legal tags) -->
+<footer class="w-full border-t border-outline-variant/40 bg-surface-container-lowest px-margin sm:px-margin-lg py-space-sm text-on-surface-variant font-label-sm text-label-sm flex flex-col sm:flex-row items-center justify-between gap-space-sm z-20">
+<div class="flex flex-wrap items-center gap-x-space-md gap-y-1">
+<span class="flex items-center gap-1 text-on-surface">
+<span class="material-symbols-outlined text-[14px] text-secondary">lock</span>
+<span>AES-256-GCM Session Encryption</span>
+</span>
+<span class="text-outline-variant">·</span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-primary-container">shield_with_heart</span>
+<span>SOC2 Type II Attested</span>
+</span>
+<span class="text-outline-variant">·</span>
+<span class="font-telemetry-num">Runtime Build v2.4.1-rc5</span>
+</div>
+<div class="flex items-center gap-space-md text-outline-variant">
+<span>ARIA VOICE OS ARCHITECTURE</span>
+<span>·</span>
+<span>© 2025 ALL RIGHTS RESERVED</span>
+</div>
+</footer>
+<!-- Light Vanilla Interactivity Script for Input States & Toggles -->
+<script>
+    // Password visibility toggle handler
+    function toggleSecretVisibility() {
+      const input = document.getElementById('accessSecret');
+      const icon = document.getElementById('secretIcon');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.textContent = 'visibility_off';
+      } else {
+        input.type = 'password';
+        icon.textContent = 'visibility';
+      }
+    }
+
+    // Keyboard CapsLock detection handler
+    const secretInput = document.getElementById('accessSecret');
+    const capsIndicator = document.getElementById('capsIndicator');
+
+    secretInput.addEventListener('keyup', function(event) {
+      if (event.getModifierState && event.getModifierState('CapsLock')) {
+        capsIndicator.classList.remove('hidden');
+        capsIndicator.classList.add('flex');
+      } else {
+        capsIndicator.classList.remove('flex');
+        capsIndicator.classList.add('hidden');
+      }
+    });
+
+    // Simulated Handshake submission transition
+    function handleSessionSubmit(event) {
+      event.preventDefault();
+      const btn = document.getElementById('submitButton');
+      const alert = document.getElementById('statusAlert');
+      
+      btn.disabled = true;
+      btn.innerHTML = `
+        <span class="w-2 h-2 bg-surface-container-lowest inline-block animate-ping"></span>
+        <span class="tracking-tight uppercase">HANDSHAKE NEGOTIATING...</span>
+      `;
+
+      // Update diagnostic display
+      alert.className = "mb-space-lg p-space-sm border border-secondary/60 bg-surface-container rounded flex items-start gap-space-sm transition-all duration-150";
+      alert.innerHTML = `
+        <span class="material-symbols-outlined text-[18px] text-secondary mt-0.5">sync</span>
+        <div class="flex-1">
+          <div class="font-label-md text-label-md text-secondary font-medium">SESSION GRANTED // INITIALIZING WEBRTC CARRIER</div>
+          <p class="font-body-sm text-body-sm text-on-surface mt-0.5">
+            Key entropy confirmed. Dispatching duplex telemetry matrix to US-EAST-01. Redirecting to operational console...
+          </p>
+        </div>
+        <span class="font-telemetry-num text-[11px] text-secondary">200 OK</span>
+      `;
+
+      setTimeout(() => {
+        btn.innerHTML = `
+          <span class="material-symbols-outlined text-[18px]">done</span>
+          <span class="tracking-tight uppercase">PIPELINE ATTACHED</span>
+        `;
+      }, 1400);
+    }
+  </script>
+</body></html>

@@ -1,4 +1,4 @@
-name: Phase 0 checks
+name: Contracts, Brain, voice code, and web checks
 
 on:
   push:
@@ -13,7 +13,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install validator tooling
-        run: python -m pip install --disable-pip-version-check jsonschema PyYAML
+        run: python -m pip install --disable-pip-version-check jsonschema==4.25.1 PyYAML==6.0.3 rfc3339-validator==0.1.4
       - name: Validate contracts and samples
         run: python scripts/validate_contracts.py
 
@@ -27,3 +27,77 @@ jobs:
         uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  python-quality-and-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned project extras
+        run: python -m pip install --disable-pip-version-check -e "apps/agent[test,quality,providers,voice,security]"
+      - name: Ruff
+        run: ruff check --no-cache apps/agent
+      - name: Strict mypy
+        working-directory: apps/agent
+        run: mypy --cache-dir /tmp/aria-mypy-cache
+      - name: Voice and provider type check
+        working-directory: apps/agent
+        run: mypy --cache-dir /tmp/aria-mypy-cache voice providers/llm
+      - name: Unit tests
+        working-directory: apps/agent
+        run: python -m pytest -p no:cacheprovider
+      - name: Deterministic evals
+        run: python evals/runner/runner.py --mode scripted
+      - name: Audit installed Python dependencies
+        run: pip-audit
+
+  web-quality-and-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - name: Install exact locked web dependencies
+        working-directory: apps/web
+        run: npm ci
+      - name: TypeScript
+        working-directory: apps/web
+        run: npm run typecheck
+      - name: Lint
+        working-directory: apps/web
+        run: npm run lint
+      - name: Unit and component tests
+        working-directory: apps/web
+        run: npm test -- --run
+      - name: Library coverage thresholds
+        working-directory: apps/web
+        run: npm run test:coverage
+      - name: Production build
+        working-directory: apps/web
+        run: npm run build
+        env:
+          LIVEKIT_API_SECRET: ARIA_CANARY_LIVEKIT_API_SECRET_20261026
+          SUPABASE_SERVICE_ROLE_KEY: ARIA_CANARY_SUPABASE_SERVICE_ROLE_KEY_20261026
+          SARVAM_API_KEY: ARIA_CANARY_SARVAM_API_KEY_20261026
+          GEMINI_API_KEY: ARIA_CANARY_GEMINI_API_KEY_20261026
+          GROQ_API_KEY: ARIA_CANARY_GROQ_API_KEY_20261026
+          IP_HASH_SECRET: ARIA_CANARY_IP_HASH_SECRET_20261026
+      - name: Check that secret canaries are absent from the client bundle
+        working-directory: apps/web
+        run: npm run check:bundle-secrets
+        env:
+          LIVEKIT_API_SECRET: ARIA_CANARY_LIVEKIT_API_SECRET_20261026
+          SUPABASE_SERVICE_ROLE_KEY: ARIA_CANARY_SUPABASE_SERVICE_ROLE_KEY_20261026
+          SARVAM_API_KEY: ARIA_CANARY_SARVAM_API_KEY_20261026
+          GEMINI_API_KEY: ARIA_CANARY_GEMINI_API_KEY_20261026
+          GROQ_API_KEY: ARIA_CANARY_GROQ_API_KEY_20261026
+          IP_HASH_SECRET: ARIA_CANARY_IP_HASH_SECRET_20261026
+      - name: Audit locked web dependencies (non-blocking until 2026-10-29)
+        working-directory: apps/web
+        continue-on-error: true
+        run: npm audit --audit-level=high

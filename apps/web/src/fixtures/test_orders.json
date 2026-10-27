@@ -1,0 +1,5 @@
+[
+  { "order_id": "ORD-101", "customer": "Priya Sharma", "product": "Vitamin C Serum (30ml)", "value_inr": 699, "status": "Out for Delivery", "notes": "BlueDart BD-982103 · expected by 6 PM today", "try_saying": "Where is ORD-101?" },
+  { "order_id": "ORD-102", "customer": "Rahul Verma", "product": "Hydrating Sunscreen SPF 50", "value_inr": 499, "status": "Delivered", "notes": "Delhivery DL-441029 · delivered 14 days ago", "try_saying": "Can I return ORD-102?" },
+  { "order_id": "ORD-103", "customer": "Ananya Patel", "product": "Green Tea Face Wash + Toner", "value_inr": 850, "status": "Processing", "notes": "Ordered 3 hours ago · eligible for cancellation", "try_saying": "Cancel ORD-103" }
+]

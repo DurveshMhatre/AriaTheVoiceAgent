@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aura.example/contracts/token_response.json",
+  "type": "object", "additionalProperties": false,
+  "required": ["call_id", "room_name", "server_url", "participant_token", "expires_in_seconds", "voice_mode", "fallback_reason", "max_call_seconds"],
+  "properties": {
+    "call_id": { "type": "string", "format": "uuid" }, "room_name": { "type": "string", "minLength": 1 },
+    "server_url": { "type": "string", "format": "uri" }, "participant_token": { "type": "string", "minLength": 1 },
+    "expires_in_seconds": { "const": 600 }, "voice_mode": { "enum": ["voice", "text"] },
+    "fallback_reason": { "type": ["string", "null"] }, "max_call_seconds": { "type": "integer", "minimum": 1, "maximum": 300 }
+  }
+}

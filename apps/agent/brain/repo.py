@@ -28,9 +28,39 @@ class InMemoryOrderRepository:
     def __init__(self, clock: Clock) -> None:
         now = clock.now()
         self._orders = {
-            "ORD-101": Order("ORD-101", "Vitamin C Serum (30ml)", 699, "Out for Delivery", "BlueDart", "BD-982103", "expected by 6 PM today", now - timedelta(hours=3), None),
-            "ORD-102": Order("ORD-102", "Hydrating Sunscreen SPF 50", 499, "Delivered", "Delhivery", "DL-441029", "delivered 14 days ago", now - timedelta(days=20), now - timedelta(days=14)),
-            "ORD-103": Order("ORD-103", "Green Tea Face Wash + Toner", 850, "Processing", None, None, "ordered 3 hours ago", now - timedelta(hours=3), None),
+            "ORD-101": Order(
+                "ORD-101",
+                "Vitamin C Serum (30ml)",
+                699,
+                "Out for Delivery",
+                "BlueDart",
+                "BD-982103",
+                "expected by 6 PM today",
+                now - timedelta(hours=3),
+                None,
+            ),
+            "ORD-102": Order(
+                "ORD-102",
+                "Hydrating Sunscreen SPF 50",
+                499,
+                "Delivered",
+                "Delhivery",
+                "DL-441029",
+                "delivered 14 days ago",
+                now - timedelta(days=20),
+                now - timedelta(days=14),
+            ),
+            "ORD-103": Order(
+                "ORD-103",
+                "Green Tea Face Wash + Toner",
+                850,
+                "Processing",
+                None,
+                None,
+                "ordered 3 hours ago",
+                now - timedelta(hours=3),
+                None,
+            ),
         }
 
     def get(self, order_id: str) -> Order | None:

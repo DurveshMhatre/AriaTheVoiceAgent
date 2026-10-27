@@ -5,6 +5,8 @@ import asyncio
 import json
 from pathlib import Path
 
+from providers.llm.factory import create_llm
+
 from .clock import SystemClock
 from .config import TenantConfigLoader
 from .repo import InMemoryOrderRepository
@@ -12,7 +14,6 @@ from .state import CallState
 from .summary import deterministic_summary
 from .tools import ToolDispatcher
 from .turn import Brain, UserTurn
-from providers.llm.factory import create_llm
 
 
 async def run(tenant: str, llm_mode: str) -> None:
@@ -48,7 +49,22 @@ async def run(tenant: str, llm_mode: str) -> None:
         if text == "/orders":
             for order_id in ("ORD-101", "ORD-102", "ORD-103"):
                 order = repo.get(order_id)
-                print(json.dumps({"order_id": order.order_id, "product": order.product, "value_inr": order.value_inr, "status": order.status, "tracking_id": order.tracking_id, "expected_note": order.expected_note}, default=str))
+                if order is None:
+                    print(json.dumps({"order_id": order_id, "error": "NOT_FOUND"}))
+                    continue
+                print(
+                    json.dumps(
+                        {
+                            "order_id": order.order_id,
+                            "product": order.product,
+                            "value_inr": order.value_inr,
+                            "status": order.status,
+                            "tracking_id": order.tracking_id,
+                            "expected_note": order.expected_note,
+                        },
+                        default=str,
+                    )
+                )
             continue
         if text == "/reset":
             state.reset()

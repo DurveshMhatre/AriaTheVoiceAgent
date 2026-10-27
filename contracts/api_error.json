@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aura.example/contracts/api_error.json",
+  "type": "object", "additionalProperties": false, "required": ["error", "fallback_mode"],
+  "properties": {
+    "error": { "type": "object", "additionalProperties": false, "required": ["code", "message"], "properties": {
+      "code": { "enum": ["AUTH_REQUIRED", "TOKEN_RATE_LIMIT", "CONCURRENT_CALL_LIMIT", "DAILY_IP_CALL_LIMIT", "MONTHLY_LIVEKIT_MINUTE_CAP", "MONTHLY_STT_CAP", "MONTHLY_TTS_CAP", "INVALID_ADMISSION_LIMITS", "VOICE_CAP_REACHED", "VOICE_UNAVAILABLE", "ORIGIN_NOT_ALLOWED", "INVALID_REQUEST", "MIGRATION_NOT_APPLIED", "CALL_DURATION_LIMIT", "PER_CALL_TTS_LIMIT", "AGENT_START_TIMEOUT", "CONNECTION_FAILED", "MIC_DENIED", "NO_MICROPHONE", "UNSUPPORTED_BROWSER", "TEXT_MODE_TURN_FAILED", "SUMMARY_UNAVAILABLE", "SESSION_EXPIRED", "UNKNOWN_ERROR"] },
+      "message": { "type": "string", "minLength": 1, "maxLength": 240 }
+    } },
+    "fallback_mode": { "enum": ["text", null] }
+  }
+}

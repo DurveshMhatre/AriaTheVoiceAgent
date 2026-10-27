@@ -12,13 +12,24 @@ class GuardrailResult:
     reasons: tuple[str, ...]
 
 
-_PROMISES = re.compile(r"\b(refund approved|i will process|guaranteed|i have cancelled|replacement is guaranteed)\b", re.I)
+_PROMISES = re.compile(
+    r"\b(refund approved|i will process|guaranteed|i have cancelled|replacement is guaranteed)\b",
+    re.I,
+)
 _URL = re.compile(r"https?://|www\.", re.I)
 
 
-def validate_output(text: str, config: dict[str, Any], grounded: list[str] | None = None, escalation: bool = False, detail_requested: bool = False) -> GuardrailResult:
+def validate_output(
+    text: str,
+    config: dict[str, Any],
+    grounded: list[str] | None = None,
+    escalation: bool = False,
+    detail_requested: bool = False,
+) -> GuardrailResult:
     reasons: list[str] = []
-    fallback = "I can share only confirmed Aura information, and the support team can follow up if needed."
+    fallback = (
+        "I can share only confirmed Aura information, and the support team can follow up if needed."
+    )
     if _PROMISES.search(text):
         reasons.append("PROMISE_LANGUAGE")
     if _URL.search(text):

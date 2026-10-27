@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+
+<html class="" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ARIA // VOICE OS - Operational Audio Console</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<!-- Fonts: Geist & JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">tailwind.config = {darkMode: "class", theme: {extend: {colors: {"on-primary-fixed-variant": "#4338ca", "on-surface-variant": "#585a68", surface: "#e8eaf0", "surface-container-highest": "#d6d8de", "tertiary-fixed-dim": "#c4b5fd", "on-tertiary": "#ffffff", "on-error": "#ffffff", "on-secondary-container": "#585a68", "surface-container": "#e2e4ea", "on-background": "#2e3040", "inverse-on-surface": "#e8eaf0", "surface-dim": "#d4d6dc", tertiary: "#7c3aed", "secondary-fixed": "#d8dae6", "outline-variant": "#d0d2dc", "primary-fixed": "#e0e2ff", "tertiary-container": "#a78bfa", "primary-container": "#818cf8", "primary-fixed-dim": "#a5b4fc", "on-surface": "#2e3040", "on-tertiary-fixed-variant": "#5b21b6", "surface-container-lowest": "#f0f2f8", "on-secondary-fixed": "#1a1b26", "surface-variant": "#dcdee4", "on-secondary": "#ffffff", "secondary-fixed-dim": "#b8baca", "on-primary-container": "#e0e2ff", "inverse-primary": "#a5b4fc", primary: "#6366f1", "surface-container-high": "#dcdee4", "secondary-container": "#d8dae6", secondary: "#6c6e7e", "tertiary-fixed": "#ede9fe", "on-secondary-fixed-variant": "#404252", "on-error-container": "#991b1b", "surface-bright": "#edeef4", "on-primary-fixed": "#1e1b4b", "error-container": "#fee2e2", "surface-container-low": "#e5e7ed", "inverse-surface": "#2e3040", "on-tertiary-container": "#3b1f63", "surface-tint": "#6366f1", "on-tertiary-fixed": "#2e1065", error: "#dc2626", "on-primary": "#ffffff", background: "#e8eaf0", outline: "#8a8c9a"}, borderRadius: {DEFAULT: "0.5rem", lg: "1rem", xl: "1.5rem", full: "9999px"}, spacing: {"margin-sm": "1rem", "space-md": "0.75rem", "space-xs": "0.25rem", "space-lg": "1.25rem", "gutter-lg": "1.5rem", "space-sm": "0.5rem", "gutter-sm": "0.75rem", gutter: "1rem", "margin-lg": "2rem", "space-xl": "2rem", margin: "1.5rem"}, fontFamily: {"headline-md": ["Geist"], "body-md": ["JetBrains Mono"], "headline-xl-mobile": ["Geist"], "headline-xl": ["Geist"], "body-sm": ["JetBrains Mono"], "telemetry-num": ["JetBrains Mono"], "headline-lg": ["Geist"], "body-lg": ["JetBrains Mono"], "label-sm": ["JetBrains Mono"], "headline-lg-mobile": ["Geist"], "headline-sm": ["Geist"], "label-md": ["JetBrains Mono"], headline: ["Plus Jakarta Sans"], display: ["Plus Jakarta Sans"], body: ["Plus Jakarta Sans"], label: ["Plus Jakarta Sans"]}, fontSize: {"headline-md": ["20px", {lineHeight: "28px", letterSpacing: "-0.015em", fontWeight: "500"}], "body-md": ["13px", {lineHeight: "20px", letterSpacing: "0em", fontWeight: "400"}], "headline-xl-mobile": ["28px", {lineHeight: "34px", letterSpacing: "-0.02em", fontWeight: "600"}], "headline-xl": ["40px", {lineHeight: "48px", letterSpacing: "-0.03em", fontWeight: "600"}], "body-sm": ["12px", {lineHeight: "18px", letterSpacing: "0em", fontWeight: "400"}], "telemetry-num": ["14px", {lineHeight: "18px", letterSpacing: "-0.02em", fontWeight: "500"}], "headline-lg": ["28px", {lineHeight: "36px", letterSpacing: "-0.02em", fontWeight: "600"}], "body-lg": ["15px", {lineHeight: "24px", letterSpacing: "-0.01em", fontWeight: "400"}], "label-sm": ["10px", {lineHeight: "14px", letterSpacing: "0.06em", fontWeight: "600"}], "headline-lg-mobile": ["22px", {lineHeight: "28px", letterSpacing: "-0.015em", fontWeight: "600"}], "headline-sm": ["16px", {lineHeight: "24px", letterSpacing: "-0.01em", fontWeight: "500"}], "label-md": ["11px", {lineHeight: "16px", letterSpacing: "0.04em", fontWeight: "500"}]}}}};</script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    /* Tabular monospaced figures */
+    .num-tabular {
+      font-feature-settings: "tnum" 1, "zero" 1;
+    }
+    /* Audio Scanline Tick Animation */
+    @keyframes scanTick {
+      0% { transform: translateY(0%); opacity: 0.8; }
+      50% { transform: translateY(100%); opacity: 0.3; }
+      100% { transform: translateY(0%); opacity: 0.8; }
+    }
+    .scan-line {
+      animation: scanTick 3.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+    /* Discrete LED Blink */
+    @keyframes ledBlink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.2; }
+    }
+    .led-live {
+      animation: ledBlink 1.4s ease-in-out infinite;
+    }
+    /* Speculative Token Pulse */
+    @keyframes speculativePulse {
+      0%, 100% { opacity: 0.9; }
+      50% { opacity: 0.35; }
+    }
+    .token-cursor {
+      animation: speculativePulse 0.9s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="bg-surface-container-lowest text-on-surface min-h-screen flex flex-col font-body-md select-none overflow-x-hidden antialiased">
+<!-- TOP APPLICATION SHELL (TopNavBar Anchor Execution) -->
+<header class="docked full-width top-0 w-full flex justify-between items-center px-margin-lg h-14 bg-surface-container-lowest border-b border-outline-variant z-50 shrink-0">
+<!-- Brand Anchor & Carrier Telemetry -->
+<div class="flex items-center gap-space-lg">
+<div class="flex items-center gap-space-sm">
+<span class="w-2.5 h-2.5 bg-secondary border border-secondary-fixed led-live"></span>
+<span class="font-headline-sm text-headline-sm font-semibold tracking-tight text-on-surface">ARIA // VOICE OS</span>
+</div>
+<div class="hidden xl:flex items-center gap-space-sm border-l border-outline-variant pl-space-lg">
+<!-- Live Carrier Pill -->
+<div class="flex items-center gap-1.5 px-2 py-0.5 border border-primary-container bg-primary-container/10 rounded-DEFAULT">
+<span class="w-1.5 h-1.5 bg-primary-container rounded-none"></span>
+<span class="font-label-sm text-label-sm text-primary-container tracking-wider uppercase font-semibold">WebRTC LiveKit</span>
+</div>
+<!-- Stream Specs -->
+<span class="font-label-sm text-label-sm text-on-surface-variant num-tabular">TLS 1.3 · OPUS 48kHz · DUPLEX</span>
+<!-- Latency Badge -->
+<div class="flex items-center gap-1 px-1.5 py-0.5 border border-outline-variant bg-surface-container-low rounded-DEFAULT">
+<span class="font-label-sm text-label-sm text-outline">RTT:</span>
+<span class="font-label-sm text-label-sm text-secondary num-tabular font-semibold">38ms</span>
+</div>
+</div>
+</div>
+<!-- Center Navigation (TopNavBar JSON links: Console active) -->
+<nav class="hidden md:flex items-center gap-space-lg h-full">
+<a class="text-primary-container border-b-2 border-primary-container font-medium pb-4 pt-4 font-label-md text-label-md transition-colors duration-150 ease-in-out" href="#">Console</a>
+<a class="text-on-surface-variant font-normal hover:text-on-surface pb-4 pt-4 font-label-md text-label-md transition-colors duration-150 ease-in-out" href="#">Topology</a>
+<a class="text-on-surface-variant font-normal hover:text-on-surface pb-4 pt-4 font-label-md text-label-md transition-colors duration-150 ease-in-out" href="#">Telemetry</a>
+<a class="text-on-surface-variant font-normal hover:text-on-surface pb-4 pt-4 font-label-md text-label-md transition-colors duration-150 ease-in-out" href="#">Logs</a>
+</nav>
+<!-- Trailing Actions & Operator Ingress Device -->
+<div class="flex items-center gap-space-md">
+<!-- Input Mic Selector -->
+<div class="hidden sm:flex items-center gap-1.5 px-2.5 py-1 border border-outline-variant bg-surface-container-low text-on-surface hover:border-outline transition-colors">
+<span class="material-symbols-outlined text-outline text-[16px]">mic</span>
+<span class="font-label-sm text-label-sm text-on-surface num-tabular">Default Mic // 48kHz</span>
+<span class="material-symbols-outlined text-outline text-[14px]">expand_more</span>
+</div>
+<!-- Trailing Icon Actions from JSON -->
+<div class="flex items-center border-l border-outline-variant pl-space-md gap-1">
+<button class="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors" title="Equalizer Telemetry">
+<span class="material-symbols-outlined text-[18px]">graphic_eq</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors" title="Command Terminal">
+<span class="material-symbols-outlined text-[18px]">terminal</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors" title="OS Settings">
+<span class="material-symbols-outlined text-[18px]">settings</span>
+</button>
+</div>
+<!-- Restrained Disconnect / End Session Action -->
+<button class="px-space-md py-1 border border-outline-variant bg-surface-container hover:border-error hover:text-error text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider transition-all duration-150 active:bg-surface-container-high flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 bg-outline group-hover:bg-error"></span>
+<span>End Session</span>
+</button>
+</div>
+</header>
+<!-- MAIN OPERATIONAL WORKSPACE (Multi-Pane Rack Console) -->
+<div class="flex-1 flex overflow-hidden">
+<!-- LEFT RACK DRAWER (SideNavBar Shared Component) -->
+<aside class="hidden lg:flex flex-col justify-between h-[calc(100vh-3.5rem)] w-60 p-space-md bg-surface-container-low border-r border-outline-variant shrink-0">
+<!-- Drawer Header -->
+<div class="space-y-space-md">
+<div class="p-2 border border-outline-variant bg-surface-container-lowest">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-secondary font-semibold">NODE 01 // US-EAST</span>
+<span class="w-1.5 h-1.5 bg-secondary"></span>
+</div>
+<p class="font-label-sm text-label-sm text-outline mt-0.5">TLS 1.3 · 48kHz OPUS</p>
+</div>
+<!-- Navigation Tabs from JSON -->
+<nav class="space-y-1">
+<a class="flex items-center gap-space-sm px-space-sm py-space-xs text-secondary border-l-2 border-secondary bg-surface-container font-medium font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+<span>Pipeline Stage</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-space-xs text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-normal font-label-md text-label-md transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">graphic_eq</span>
+<span>Audio Matrix</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-space-xs text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-normal font-label-md text-label-md transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">conversion_path</span>
+<span>State Machine</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-space-xs text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-normal font-label-md text-label-md transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">subtitles</span>
+<span>Transcripts</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-space-xs text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-normal font-label-md text-label-md transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">monitoring</span>
+<span>Telemetry</span>
+</a>
+</nav>
+<!-- Pipeline Status Block -->
+<div class="border-t border-outline-variant pt-space-md space-y-2">
+<div class="font-label-sm text-label-sm uppercase tracking-wider text-outline">Pipeline Latency Matrix</div>
+<div class="grid grid-cols-2 gap-1.5 font-label-sm text-label-sm num-tabular">
+<div class="bg-surface-container-lowest p-1.5 border border-outline-variant">
+<span class="text-outline block">VAD Gate</span>
+<span class="text-primary-container font-medium">8.2ms</span>
+</div>
+<div class="bg-surface-container-lowest p-1.5 border border-outline-variant">
+<span class="text-outline block">Deepgram ASR</span>
+<span class="text-primary-container font-medium">74.0ms</span>
+</div>
+<div class="bg-surface-container-lowest p-1.5 border border-outline-variant">
+<span class="text-outline block">LLM TTFT</span>
+<span class="text-secondary font-medium">142.0ms</span>
+</div>
+<div class="bg-surface-container-lowest p-1.5 border border-outline-variant">
+<span class="text-outline block">Cartesia TTS</span>
+<span class="text-secondary font-medium">88.5ms</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Drawer Footer & CTA -->
+<div class="space-y-space-md border-t border-outline-variant pt-space-md">
+<div class="space-y-1">
+<a class="flex items-center gap-space-sm px-space-sm py-space-xs text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[18px]">troubleshoot</span>
+<span>Diagnostics</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-space-xs text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[18px]">terminal</span>
+<span>Terminal</span>
+</a>
+</div>
+<button class="w-full py-1.5 border border-error-container text-error hover:bg-error-container/20 font-label-sm text-label-sm uppercase tracking-wider transition-colors">
+          Kill Carrier
+        </button>
+</div>
+</aside>
+<!-- CENTER & RIGHT CONSOLE WORKSPACE -->
+<main class="flex-1 flex flex-col xl:flex-row overflow-hidden bg-surface-container-lowest">
+<!-- ============================================== -->
+<!-- SECTION 2 & 3: CENTRAL SIGNATURE VOICE STAGE    -->
+<!-- ============================================== -->
+<section class="flex-1 flex flex-col border-r border-outline-variant overflow-y-auto">
+<!-- Stage Header & State Machine Switcher Strip -->
+<div class="border-b border-outline-variant bg-surface-container-low px-space-lg py-2 flex flex-wrap items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-sm">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-outline">ACOUSTIC STAGE //</span>
+<span class="font-label-sm text-label-sm uppercase font-semibold px-2 py-0.5 border border-secondary text-secondary bg-secondary/10" id="current-state-badge">
+              STATE: LISTENING
+            </span>
+</div>
+<!-- 7-State Machine Switcher / Debug Tracing -->
+<div class="flex items-center border border-outline-variant bg-surface-container-lowest p-0.5 text-label-sm font-label-sm">
+<button class="state-tab px-2 py-1 text-on-surface-variant hover:text-on-surface" onclick="setVoiceState('idle')">Idle</button>
+<button class="state-tab px-2 py-1 text-on-surface-variant hover:text-on-surface" onclick="setVoiceState('connecting')">Connecting</button>
+<button class="state-tab px-2 py-1 bg-surface-container text-secondary font-semibold" onclick="setVoiceState('listening')">Listening</button>
+<button class="state-tab px-2 py-1 text-on-surface-variant hover:text-on-surface" onclick="setVoiceState('processing')">Processing</button>
+<button class="state-tab px-2 py-1 text-on-surface-variant hover:text-on-surface" onclick="setVoiceState('speaking')">Speaking</button>
+<button class="state-tab px-2 py-1 text-on-surface-variant hover:text-on-surface" onclick="setVoiceState('disconnected')">Disconnected</button>
+<button class="state-tab px-2 py-1 text-on-surface-variant hover:text-error" onclick="setVoiceState('error')">Error</button>
+</div>
+</div>
+<!-- The Core Acoustic Instrument Canvas -->
+<div class="flex-1 p-space-lg flex flex-col justify-between gap-space-lg bg-[#0A0C0E]">
+<!-- Top Stage Telemetry & Carrier Metadata -->
+<div class="flex items-center justify-between border-b border-outline-variant/60 pb-space-sm font-label-sm text-label-sm text-outline num-tabular">
+<div class="flex items-center gap-space-md">
+<span class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 bg-primary-container"></span>
+<span>DUPLEX AUDIO MATRIX</span>
+</span>
+<span>BUFFER: 128 SAMPLES (2.6ms)</span>
+<span>PEAK: -14.2 dBFS</span>
+</div>
+<div class="flex items-center gap-space-md">
+<span class="text-secondary font-semibold tracking-wider uppercase" id="state-prompt-text">
+                OPERATOR INGRESS DETECTED // VAD GATE TRIGGERED
+              </span>
+<span class="border border-outline-variant px-1.5 py-0.5 text-on-surface-variant">48.000 kHz</span>
+</div>
+</div>
+<!-- Main Calibrated Visualizer Box -->
+<div class="relative w-full flex-1 min-h-[290px] border border-outline-variant bg-surface-container-lowest p-space-md flex flex-col justify-between overflow-hidden">
+<!-- Technical Grid Overlay Lines with dB Scales -->
+<div class="absolute inset-0 pointer-events-none flex flex-col justify-between p-3 opacity-30">
+<div class="w-full border-b border-dashed border-outline-variant flex justify-between text-[9px] font-label-sm text-outline">
+<span>+0 dBFS (PEAK LIMIT)</span>
+<span>CH_L / CH_R STEREO ALIGNED</span>
+</div>
+<div class="w-full border-b border-dashed border-outline-variant flex justify-between text-[9px] font-label-sm text-outline">
+<span>-6 dBFS (TARGET HEADROOM)</span>
+<span>VAD TRIGGER THRESHOLD: -24 dBFS</span>
+</div>
+<div class="w-full border-b border-dashed border-outline-variant flex justify-between text-[9px] font-label-sm text-outline">
+<span>-18 dBFS (NOMINAL)</span>
+<span>RNNOISE SUPPRESSION: -12.4 dB</span>
+</div>
+<div class="w-full border-b border-dashed border-outline-variant flex justify-between text-[9px] font-label-sm text-outline">
+<span>-36 dBFS (NOISE FLOOR)</span>
+<span>CROSS-TALK REJECTION: ACTIVE</span>
+</div>
+<div class="w-full border-b border-dashed border-outline-variant flex justify-between text-[9px] font-label-sm text-outline">
+<span>-60 dBFS (SILENCE ZERO)</span>
+<span>ZERO DRIFT COMPENSATOR</span>
+</div>
+</div>
+<!-- Vertical Scanning Reference Line -->
+<div class="absolute inset-y-0 w-px bg-primary-container/40 pointer-events-none scan-line" style="left: 48%;"></div>
+<!-- Visualizer Render Area: Dual Duplex Channels -->
+<div class="relative z-10 w-full h-full flex flex-col justify-center items-center" id="visualizer-content">
+<!-- Active Listening State: High dynamic range bars (Default) -->
+<div class="w-full h-full flex flex-col justify-center" id="state-listening-vis">
+<!-- Channel Label -->
+<div class="flex justify-between items-center text-label-sm font-label-sm mb-2 text-outline">
+<span class="text-secondary flex items-center gap-1 font-semibold">
+<span class="w-2 h-2 bg-secondary inline-block"></span>
+                    CH 01 // OPERATOR INGRESS (MIC)
+                  </span>
+<span class="num-tabular text-secondary font-semibold">VAD TRIGGER: ACTIVE (0.94 CONFIDENCE)</span>
+</div>
+<!-- Frequency Histogram Vector Bars -->
+<div class="w-full h-24 flex items-center justify-between gap-1 px-1">
+<!-- Generated Bars: Mix of Lime and Cyan -->
+<div class="w-full bg-secondary/80 h-10 transition-all duration-75"></div>
+<div class="w-full bg-secondary/90 h-16 transition-all duration-75"></div>
+<div class="w-full bg-secondary h-20 transition-all duration-75"></div>
+<div class="w-full bg-secondary h-12 transition-all duration-75"></div>
+<div class="w-full bg-secondary h-24 transition-all duration-75"></div>
+<div class="w-full bg-secondary/90 h-16 transition-all duration-75"></div>
+<div class="w-full bg-secondary/80 h-8 transition-all duration-75"></div>
+<div class="w-full bg-primary-container h-14 transition-all duration-75"></div>
+<div class="w-full bg-primary-container h-20 transition-all duration-75"></div>
+<div class="w-full bg-primary-container h-24 transition-all duration-75"></div>
+<div class="w-full bg-primary-container h-16 transition-all duration-75"></div>
+<div class="w-full bg-secondary h-20 transition-all duration-75"></div>
+<div class="w-full bg-secondary h-28 transition-all duration-75"></div>
+<div class="w-full bg-secondary/80 h-12 transition-all duration-75"></div>
+<div class="w-full bg-secondary/60 h-6 transition-all duration-75"></div>
+<div class="w-full bg-primary-container/80 h-14 transition-all duration-75"></div>
+<div class="w-full bg-primary-container h-24 transition-all duration-75"></div>
+<div class="w-full bg-secondary h-18 transition-all duration-75"></div>
+<div class="w-full bg-secondary h-12 transition-all duration-75"></div>
+<div class="w-full bg-outline-variant h-4 transition-all duration-75"></div>
+<div class="w-full bg-secondary/70 h-10 transition-all duration-75"></div>
+<div class="w-full bg-secondary h-20 transition-all duration-75"></div>
+<div class="w-full bg-primary-container h-16 transition-all duration-75"></div>
+<div class="w-full bg-primary-container h-8 transition-all duration-75"></div>
+<div class="w-full bg-outline-variant h-3 transition-all duration-75"></div>
+</div>
+<!-- Sub-channel: Synthetic Aria Return (Resting) -->
+<div class="flex justify-between items-center text-label-sm font-label-sm mt-4 mb-1 text-outline">
+<span class="flex items-center gap-1">
+<span class="w-2 h-2 bg-outline-variant inline-block"></span>
+                    CH 02 // ARIA EGRESS (SYNTHESIS RET)
+                  </span>
+<span class="num-tabular">IDLE STANDBY · 24kHz DOWNSAMPLE READY</span>
+</div>
+<div class="w-full h-8 flex items-center justify-between gap-1 px-1 opacity-40">
+<div class="w-full bg-outline-variant h-1"></div>
+<div class="w-full bg-outline-variant h-1"></div>
+<div class="w-full bg-outline-variant h-1.5"></div>
+<div class="w-full bg-outline-variant h-1"></div>
+<div class="w-full bg-outline-variant h-2"></div>
+<div class="w-full bg-outline-variant h-1.5"></div>
+<div class="w-full bg-outline-variant h-1"></div>
+<div class="w-full bg-outline-variant h-1"></div>
+<div class="w-full bg-outline-variant h-1"></div>
+<div class="w-full bg-outline-variant h-1"></div>
+<div class="w-full bg-outline-variant h-2"></div>
+<div class="w-full bg-outline-variant h-1"></div>
+<div class="w-full bg-outline-variant h-1"></div>
+<div class="w-full bg-outline-variant h-1.5"></div>
+<div class="w-full bg-outline-variant h-1"></div>
+<div class="w-full bg-outline-variant h-1"></div>
+<div class="w-full bg-outline-variant h-1"></div>
+<div class="w-full bg-outline-variant h-1"></div>
+<div class="w-full bg-outline-variant h-1"></div>
+<div class="w-full bg-outline-variant h-1"></div>
+<div class="w-full bg-outline-variant h-1"></div>
+<div class="w-full bg-outline-variant h-1"></div>
+<div class="w-full bg-outline-variant h-1"></div>
+<div class="w-full bg-outline-variant h-1"></div>
+<div class="w-full bg-outline-variant h-1"></div>
+</div>
+</div>
+<!-- State: Idle (Hidden by default, switched via script) -->
+<div class="hidden w-full h-full flex flex-col justify-center items-center text-center" id="state-idle-vis">
+<div class="w-3/4 h-8 flex items-center justify-between gap-1 opacity-30 mb-4">
+<div class="w-full bg-outline h-1"></div>
+<div class="w-full bg-outline h-1.5"></div>
+<div class="w-full bg-outline h-1"></div>
+<div class="w-full bg-outline h-2"></div>
+<div class="w-full bg-outline h-1"></div>
+<div class="w-full bg-outline h-1"></div>
+<div class="w-full bg-outline h-2.5"></div>
+<div class="w-full bg-outline h-1"></div>
+</div>
+<div class="font-headline-sm text-headline-sm text-on-surface font-medium">AUDIO BUS ENGAGED</div>
+<div class="font-label-sm text-label-sm text-outline mt-1">READY // TAP OR HOLD SPACEBAR TO TRANSMIT</div>
+</div>
+<!-- State: Connecting -->
+<div class="hidden w-full h-full flex flex-col justify-center items-center text-center" id="state-connecting-vis">
+<div class="w-6 h-6 border-2 border-primary-container border-t-transparent animate-spin mb-3"></div>
+<div class="font-headline-sm text-headline-sm text-primary-container font-medium">WEBRTC SIGNAL HANDSHAKE</div>
+<div class="font-label-sm text-label-sm text-outline mt-1 num-tabular">ESTABLISHING DTLS-SRTP CRYPTO KEYS · LIVEKIT PEER CONNECTION...</div>
+</div>
+<!-- State: Processing -->
+<div class="hidden w-full h-full flex flex-col justify-center items-center" id="state-processing-vis">
+<div class="w-full max-w-md space-y-2">
+<div class="flex justify-between font-label-sm text-label-sm text-primary-container">
+<span>SYNTHETIC INFERENCE PIPELINE</span>
+<span class="num-tabular">GENERATING STREAM (32 TOKENS BUFFERED)</span>
+</div>
+<div class="w-full h-2 bg-surface-container border border-outline-variant overflow-hidden">
+<div class="w-2/3 h-full bg-primary-container transition-all duration-300"></div>
+</div>
+<div class="font-label-sm text-label-sm text-outline text-center">REASONING // GENERATING SYNTH STREAM</div>
+</div>
+</div>
+<!-- State: Speaking -->
+<div class="hidden w-full h-full flex flex-col justify-center" id="state-speaking-vis">
+<div class="flex justify-between items-center text-label-sm font-label-sm mb-2 text-primary-container">
+<span class="flex items-center gap-1 font-semibold">
+<span class="w-2 h-2 bg-primary-container inline-block"></span>
+                    CH 02 // ARIA EGRESS (ACTIVE SYNTHESIS)
+                  </span>
+<span class="num-tabular font-semibold">CARTESIA TTS · 24 kHz OPUS · 98.4% CLARITY</span>
+</div>
+<div class="w-full h-24 flex items-center justify-between gap-1 px-1">
+<div class="w-full bg-primary-container h-8"></div>
+<div class="w-full bg-primary-container h-16"></div>
+<div class="w-full bg-primary-container h-24"></div>
+<div class="w-full bg-primary-container h-28"></div>
+<div class="w-full bg-primary-container h-18"></div>
+<div class="w-full bg-primary-container h-12"></div>
+<div class="w-full bg-primary-container h-24"></div>
+<div class="w-full bg-primary-container h-26"></div>
+<div class="w-full bg-primary-container h-14"></div>
+<div class="w-full bg-primary-container h-20"></div>
+<div class="w-full bg-primary-container h-28"></div>
+<div class="w-full bg-primary-container h-16"></div>
+<div class="w-full bg-primary-container h-8"></div>
+</div>
+</div>
+<!-- State: Disconnected -->
+<div class="hidden w-full h-full flex flex-col justify-center items-center text-center" id="state-disconnected-vis">
+<span class="material-symbols-outlined text-[36px] text-outline mb-2">signal_disconnected</span>
+<div class="font-headline-sm text-headline-sm text-on-surface-variant font-medium">CARRIER BUS DISCONNECTED</div>
+<p class="font-label-sm text-label-sm text-outline mt-1 mb-4">No active WebRTC peer transport found on Node 01.</p>
+<button class="px-space-lg py-1.5 border border-primary-container text-primary-container hover:bg-primary-container hover:text-surface font-label-md text-label-md font-semibold uppercase tracking-wider transition-colors">
+                  Connect Carrier
+                </button>
+</div>
+<!-- State: Error -->
+<div class="hidden w-full h-full flex flex-col justify-center items-center text-center" id="state-error-vis">
+<span class="material-symbols-outlined text-[36px] text-error mb-2">error</span>
+<div class="font-headline-sm text-headline-sm text-error font-medium">WEBRTC ICE DISCONNECTED // CODE 4008</div>
+<p class="font-label-sm text-label-sm text-outline mt-1 mb-4">STUN/TURN binding failed: STUN host timeout (us-east.aria.turn.net:3478).</p>
+<button class="px-space-lg py-1.5 border border-error bg-error-container text-on-error font-label-md text-label-md font-semibold uppercase tracking-wider transition-colors">
+                  1-Click Instant Retry Recovery
+                </button>
+</div>
+</div>
+<!-- Bottom Visualizer Footer: Frequency Bins Indicator -->
+<div class="relative z-10 w-full flex justify-between border-t border-outline-variant/60 pt-2 text-[10px] font-label-sm text-outline num-tabular">
+<span>20 Hz</span>
+<span>125 Hz</span>
+<span>500 Hz</span>
+<span>1.0 kHz</span>
+<span>4.0 kHz</span>
+<span>8.0 kHz</span>
+<span>16.0 kHz</span>
+<span>24.0 kHz</span>
+</div>
+</div>
+<!-- ============================================== -->
+<!-- SECTION 3: CALL CONTROLS (TACTILE INSTRUMENT)  -->
+<!-- ============================================== -->
+<div class="border border-outline-variant bg-surface-container-low p-space-md">
+<div class="flex flex-col md:flex-row items-center justify-between gap-space-md">
+<!-- Left: Hardware Inputs & Noise Gates -->
+<div class="flex items-center gap-space-md w-full md:w-auto justify-between md:justify-start">
+<!-- Hardware Mute Toggle -->
+<button class="px-3 py-2 border border-outline-variant bg-surface-container text-on-surface hover:border-outline font-label-sm text-label-sm flex items-center gap-2 transition-colors" id="mute-btn" onclick="toggleMute()">
+<span class="material-symbols-outlined text-[18px]">mic</span>
+<span id="mute-label">MUTE [M]</span>
+</button>
+<!-- Noise Suppression Toggle -->
+<button class="px-3 py-2 border border-secondary text-secondary bg-secondary/10 font-label-sm text-label-sm flex items-center gap-1.5 transition-colors">
+<span class="w-1.5 h-1.5 bg-secondary"></span>
+<span>RNNOISE ACTIVE</span>
+</button>
+<!-- Gain Slider Level (-12dB to +12dB) -->
+<div class="flex items-center gap-2 border border-outline-variant bg-surface-container-lowest px-2.5 py-1.5">
+<span class="font-label-sm text-label-sm text-outline">GAIN:</span>
+<input class="w-20 accent-primary-container cursor-pointer h-1 bg-surface-container-highest" max="12" min="-12" oninput="document.getElementById('gain-val').innerText = (this.value &gt;= 0 ? '+' : '') + this.value + ' dB'" step="1" type="range" value="0"/>
+<span class="font-label-sm text-label-sm text-on-surface num-tabular w-12 text-right" id="gain-val">+0 dB</span>
+</div>
+</div>
+<!-- Center: Giant Tactile PTT / Transmit Trigger -->
+<div class="w-full md:w-auto flex justify-center">
+<button class="w-full md:w-64 h-12 bg-secondary text-surface font-headline-sm text-headline-sm font-semibold tracking-tight border border-secondary-fixed flex items-center justify-center gap-2 hover:bg-secondary-fixed transition-transform active:scale-[0.99] select-none" id="ptt-trigger">
+<span class="w-2.5 h-2.5 bg-surface led-live"></span>
+<span>TRANSMIT // MIC ACTIVE</span>
+<span class="text-[10px] font-label-sm border border-surface/40 px-1 py-0.2 ml-1 text-surface font-normal">[SPACE]</span>
+</button>
+</div>
+<!-- Right: Text Fallback Toggle & Mode Controls -->
+<div class="flex items-center gap-space-sm w-full md:w-auto justify-end">
+<button class="px-3 py-2 border border-outline-variant bg-surface-container text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm flex items-center gap-1.5 transition-colors" onclick="toggleFallbackDrawer()">
+<span class="material-symbols-outlined text-[16px]">keyboard</span>
+<span>TEXT FALLBACK</span>
+</button>
+<div class="border border-outline-variant bg-surface-container-lowest p-1.5 flex items-center" title="Latching PTT Mode">
+<span class="material-symbols-outlined text-outline text-[18px]">lock_open</span>
+</div>
+</div>
+</div>
+<!-- Expandable Text Fallback Input Bar -->
+<div class="hidden mt-space-md pt-space-md border-t border-outline-variant" id="text-fallback-drawer">
+<div class="flex items-center gap-space-sm">
+<span class="font-label-sm text-label-sm text-outline uppercase">PROMPT BYPASS:</span>
+<div class="relative flex-1">
+<input class="w-full bg-surface-container-lowest border border-outline-variant focus:border-primary-container px-3 py-1.5 font-body-sm text-body-sm text-on-surface placeholder:text-outline outline-none" placeholder="⌘K / Type speculative input or operator instruction..." type="text"/>
+<span class="absolute right-2.5 top-2 text-[10px] font-label-sm text-outline border border-outline-variant px-1">ENTER ↵</span>
+</div>
+<button class="px-3 py-1.5 border border-primary-container bg-primary-container/10 text-primary-container font-label-sm text-label-sm hover:bg-primary-container hover:text-surface transition-colors">
+                  DISPATCH
+                </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ============================================== -->
+<!-- SECTION 4: TRANSCRIPT & TELEMETRY STREAM PANEL -->
+<!-- ============================================== -->
+<aside class="w-full xl:w-[460px] flex flex-col border-l border-outline-variant bg-surface-container-low shrink-0 h-full overflow-hidden">
+<!-- Panel Header: Dual Mode Switch (Transcript vs Activity) -->
+<div class="h-10 border-b border-outline-variant px-space-md bg-surface-container flex items-center justify-between shrink-0">
+<div class="flex items-center gap-space-md">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface font-semibold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px] text-primary-container">format_quote</span>
+              TRANSCRIPT STREAM
+            </span>
+<span class="font-label-sm text-label-sm text-outline num-tabular">CONF: 99.1%</span>
+</div>
+<!-- Session Timing Readout -->
+<div class="flex items-center gap-2 font-label-sm text-label-sm num-tabular text-outline">
+<span>SESSION: 02:44.810</span>
+<span class="w-1.5 h-1.5 bg-secondary"></span>
+</div>
+</div>
+<!-- Scrollable Conversational Transcript Stream -->
+<div class="flex-1 p-space-md overflow-y-auto space-y-space-md bg-surface-container-lowest">
+<!-- Message 1: Operator -->
+<div class="border-l-2 border-secondary bg-surface-container/40 p-2.5 pl-3 space-y-1">
+<div class="flex items-center justify-between font-label-sm text-label-sm">
+<span class="text-secondary font-semibold">OPERATOR [INGRESS]</span>
+<span class="text-outline num-tabular">02:14.390 · 0.98 ASR CONF</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface">
+              Aria, query the live deployment cluster in us-east-2 and confirm our failover egress route.
+            </p>
+</div>
+<!-- Tool Execution Event (LiveKit / Agent Dispatch) -->
+<div class="border border-outline-variant bg-surface-container-low p-2 space-y-1 font-label-sm text-label-sm">
+<div class="flex items-center justify-between text-outline">
+<span class="flex items-center gap-1 text-primary-container font-semibold">
+<span class="material-symbols-outlined text-[14px]">terminal</span>
+                TOOL DISPATCH // fetchClusterTopology
+              </span>
+<span class="num-tabular text-on-surface-variant">32ms LATENCY</span>
+</div>
+<div class="p-1 bg-surface-container-lowest font-body-sm text-[11px] text-outline-variant font-mono">
+              payload: { region: "us-east-2", target_tier: "primary_egress" } → 200 OK
+            </div>
+</div>
+<!-- Message 2: Aria (Synth Egress) -->
+<div class="border-l-2 border-primary-container bg-surface-container/40 p-2.5 pl-3 space-y-1">
+<div class="flex items-center justify-between font-label-sm text-label-sm">
+<span class="text-primary-container font-semibold">ARIA [SYNTH EGRESS]</span>
+<span class="text-outline num-tabular">02:16.820 · TTFT 142ms</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface">
+              Cluster <span class="font-semibold text-primary">us-east-2</span> is nominal with 3 healthy egress gateways. Current failover target is locked to <span class="font-semibold text-primary">us-east-1 (Ashburn)</span> with 8ms link jitter.
+            </p>
+</div>
+<!-- Message 3: Operator (In Progress / Speculative Stream) -->
+<div class="border-l-2 border-secondary bg-surface-container/60 p-2.5 pl-3 space-y-1">
+<div class="flex items-center justify-between font-label-sm text-label-sm">
+<span class="text-secondary font-semibold">OPERATOR [INGRESS]</span>
+<span class="text-secondary num-tabular">02:42.110 · STREAMING...</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface">
+              Confirmed. Prepare to shift 25% of audio traffic to the secondary gateway and report back.
+              <!-- Speculative Token Preview Indicator -->
+<span class="inline-block w-2 h-3.5 bg-secondary ml-1 token-cursor align-middle"></span>
+</p>
+</div>
+<!-- In-flight Reasoning Telemetry -->
+<div class="p-2 border border-outline-variant bg-surface-container-low flex items-center justify-between text-label-sm font-label-sm text-outline num-tabular">
+<span class="flex items-center gap-1.5 text-primary-container">
+<span class="w-1.5 h-1.5 bg-primary-container animate-pulse"></span>
+              SPECULATIVE TOKENS: 14 BUFF
+            </span>
+<span>TOKEN EMIT: 48 TOK/S</span>
+</div>
+</div>
+<!-- Subordinated Technical Event & Room Activity Drawer -->
+<div class="border-t border-outline-variant bg-surface-container-low p-space-md space-y-2 shrink-0">
+<div class="flex items-center justify-between font-label-sm text-label-sm text-outline">
+<span class="font-semibold uppercase text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">hub</span>
+              LIVEKIT ROOM TELEMETRY
+            </span>
+<span class="num-tabular">ROOM: aria-prod-0881</span>
+</div>
+<div class="space-y-1 font-label-sm text-label-sm">
+<div class="flex justify-between py-0.5 border-b border-outline-variant/40">
+<span class="text-outline">Packet Loss (Ingress)</span>
+<span class="text-secondary num-tabular font-medium">0.00%</span>
+</div>
+<div class="flex justify-between py-0.5 border-b border-outline-variant/40">
+<span class="text-outline">Jitter Buffer</span>
+<span class="text-on-surface num-tabular">1.2ms (Zero Drift)</span>
+</div>
+<div class="flex justify-between py-0.5">
+<span class="text-outline">Active Track Subscriptions</span>
+<span class="text-primary-container num-tabular">audio_ingress (Opus)</span>
+</div>
+</div>
+<!-- Post-call Summary Ready Slot -->
+<div class="pt-2 border-t border-outline-variant flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-outline">AUTONOMOUS AUDIT LOG:</span>
+<button class="font-label-sm text-label-sm text-primary-container hover:underline uppercase flex items-center gap-1">
+<span>View JSON Trace</span>
+<span class="material-symbols-outlined text-[12px]">open_in_new</span>
+</button>
+</div>
+</div>
+</aside>
+</main>
+</div>
+<!-- INTERACTIVE LOGIC: State Switcher, Mute Toggle & Ergonomic Key Affordances -->
+<script>
+    // State Machine Switcher Logic for Preview & Inspection
+    function setVoiceState(state) {
+      // List of all 7 mandatory states
+      const states = ['idle', 'connecting', 'listening', 'processing', 'speaking', 'disconnected', 'error'];
+      
+      // Update Tab Styles
+      const tabs = document.querySelectorAll('.state-tab');
+      tabs.forEach(tab => {
+        if(tab.innerText.toLowerCase() === state) {
+          tab.className = "state-tab px-2 py-1 bg-surface-container text-secondary font-semibold";
+        } else {
+          tab.className = "state-tab px-2 py-1 text-on-surface-variant hover:text-on-surface";
+        }
+      });
+
+      // Hide all visualizer state views
+      states.forEach(s => {
+        const el = document.getElementById(`state-${s}-vis`);
+        if(el) el.classList.add('hidden');
+      });
+
+      // Show chosen visualizer view
+      const targetVis = document.getElementById(`state-${state}-vis`);
+      if(targetVis) targetVis.classList.remove('hidden');
+
+      // Update Badge and Text Affordances
+      const badge = document.getElementById('current-state-badge');
+      const promptText = document.getElementById('state-prompt-text');
+      const pttBtn = document.getElementById('ptt-trigger');
+
+      switch(state) {
+        case 'idle':
+          badge.className = "font-label-sm text-label-sm uppercase font-semibold px-2 py-0.5 border border-outline text-outline bg-surface-container";
+          badge.innerText = "STATE: IDLE";
+          promptText.className = "text-outline font-semibold tracking-wider uppercase";
+          promptText.innerText = "STANDBY // READY FOR OPERATOR INGRESS";
+          pttBtn.className = "w-full md:w-64 h-12 bg-surface-container text-on-surface border border-outline-variant hover:border-primary-container font-headline-sm text-headline-sm font-semibold tracking-tight flex items-center justify-center gap-2 select-none";
+          pttBtn.innerHTML = `<span>PRESS TO TRANSMIT</span><span class="text-[10px] font-label-sm border border-outline px-1 ml-1">[SPACE]</span>`;
+          break;
+
+        case 'connecting':
+          badge.className = "font-label-sm text-label-sm uppercase font-semibold px-2 py-0.5 border border-primary-container text-primary-container bg-primary-container/10";
+          badge.innerText = "STATE: CONNECTING";
+          promptText.className = "text-primary-container font-semibold tracking-wider uppercase";
+          promptText.innerText = "TRANSPORT HANDSHAKE // WEBRTC ICE GATHERING";
+          break;
+
+        case 'listening':
+          badge.className = "font-label-sm text-label-sm uppercase font-semibold px-2 py-0.5 border border-secondary text-secondary bg-secondary/10";
+          badge.innerText = "STATE: LISTENING";
+          promptText.className = "text-secondary font-semibold tracking-wider uppercase";
+          promptText.innerText = "OPERATOR INGRESS DETECTED // VAD GATE TRIGGERED";
+          pttBtn.className = "w-full md:w-64 h-12 bg-secondary text-surface font-headline-sm text-headline-sm font-semibold tracking-tight border border-secondary-fixed flex items-center justify-center gap-2 select-none";
+          pttBtn.innerHTML = `<span class="w-2.5 h-2.5 bg-surface led-live"></span><span>TRANSMIT // MIC ACTIVE</span><span class="text-[10px] font-label-sm border border-surface/40 px-1 ml-1">[SPACE]</span>`;
+          break;
+
+        case 'processing':
+          badge.className = "font-label-sm text-label-sm uppercase font-semibold px-2 py-0.5 border border-primary text-primary bg-primary/10";
+          badge.innerText = "STATE: PROCESSING";
+          promptText.className = "text-primary font-semibold tracking-wider uppercase";
+          promptText.innerText = "REASONING // GENERATING SYNTH STREAM";
+          break;
+
+        case 'speaking':
+          badge.className = "font-label-sm text-label-sm uppercase font-semibold px-2 py-0.5 border border-primary-container text-primary-container bg-primary-container/10";
+          badge.innerText = "STATE: SPEAKING";
+          promptText.className = "text-primary-container font-semibold tracking-wider uppercase";
+          promptText.innerText = "ARIA EGRESS ACTIVE · 24 kHz OPUS DOWNSAMPLE";
+          break;
+
+        case 'disconnected':
+          badge.className = "font-label-sm text-label-sm uppercase font-semibold px-2 py-0.5 border border-outline-variant text-outline bg-surface-container-low";
+          badge.innerText = "STATE: DISCONNECTED";
+          promptText.className = "text-outline font-semibold tracking-wider uppercase";
+          promptText.innerText = "CARRIER UNLINKED // PEER DISCONNECTED";
+          break;
+
+        case 'error':
+          badge.className = "font-label-sm text-label-sm uppercase font-semibold px-2 py-0.5 border border-error text-error bg-error-container/20";
+          badge.innerText = "STATE: ERROR 4008";
+          promptText.className = "text-error font-semibold tracking-wider uppercase";
+          promptText.innerText = "WEBRTC ICE FAILURE // ICE DISCONNECTED";
+          break;
+      }
+    }
+
+    // Hardware Mute State Toggle
+    let isMuted = false;
+    function toggleMute() {
+      isMuted = !isMuted;
+      const btn = document.getElementById('mute-btn');
+      const label = document.getElementById('mute-label');
+      if (isMuted) {
+        btn.classList.add('border-error', 'text-error', 'bg-error-container/10');
+        label.innerText = 'MUTED [M]';
+      } else {
+        btn.classList.remove('border-error', 'text-error', 'bg-error-container/10');
+        label.innerText = 'MUTE [M]';
+      }
+    }
+
+    // Expandable Prompt / Fallback Drawer
+    function toggleFallbackDrawer() {
+      const drawer = document.getElementById('text-fallback-drawer');
+      drawer.classList.toggle('hidden');
+    }
+
+    // Ergonomic Keyboard Affordances (Space for PTT, M for Mute)
+    window.addEventListener('keydown', (e) => {
+      // Ignore if focus is in a text input
+      if (e.target.tagName === 'INPUT') return;
+
+      if (e.code === 'Space' && !e.repeat) {
+        e.preventDefault();
+        setVoiceState('listening');
+      } else if (e.code === 'KeyM') {
+        toggleMute();
+      }
+    });
+
+    window.addEventListener('keyup', (e) => {
+      if (e.target.tagName === 'INPUT') return;
+      if (e.code === 'Space') {
+        e.preventDefault();
+        setVoiceState('idle');
+      }
+    });
+  </script>
+</body></html>

@@ -20,7 +20,9 @@ class CallState:
     interrupted: bool = False
     spoken_history: list[dict[str, str]] = field(default_factory=list)
     tool_results: list[dict[str, Any]] = field(default_factory=list)
-    usage: dict[str, int] = field(default_factory=lambda: {"calls": 0, "input_tokens": 0, "output_tokens": 0, "latency_ms": 0})
+    usage: dict[str, int] = field(
+        default_factory=lambda: {"calls": 0, "input_tokens": 0, "output_tokens": 0, "latency_ms": 0}
+    )
 
     def set_candidate(self, order_id: str) -> None:
         self.candidate_id = order_id
@@ -53,7 +55,9 @@ class CallState:
 
     def commit_spoken(self, turn_id: str, spoken_text: str) -> None:
         self.interrupted = True
-        self.spoken_history = [item for item in self.spoken_history if item.get("turn_id") != turn_id]
+        self.spoken_history = [
+            item for item in self.spoken_history if item.get("turn_id") != turn_id
+        ]
         self.spoken_history.append({"turn_id": turn_id, "text": spoken_text})
 
     def as_dict(self) -> dict[str, Any]:

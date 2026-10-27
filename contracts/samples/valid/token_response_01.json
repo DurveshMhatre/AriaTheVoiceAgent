@@ -1,0 +1,1 @@
+{"call_id":"9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d","room_name":"aura-demo","server_url":"wss://livekit.example.test","participant_token":"canary-token","expires_in_seconds":600,"voice_mode":"text","fallback_reason":"MONTHLY_STT_CAP","max_call_seconds":300}

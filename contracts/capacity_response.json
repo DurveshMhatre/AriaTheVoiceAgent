@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aura.example/contracts/capacity_response.json",
+  "type": "object", "additionalProperties": false,
+  "required": ["capacity", "checked_at", "cache_seconds"],
+  "properties": {
+    "capacity": { "enum": ["voice_available", "text_only", "busy", "daily_limit_reached", "unavailable"] },
+    "checked_at": { "type": "string", "format": "date-time" }, "cache_seconds": { "const": 30 }
+  }
+}

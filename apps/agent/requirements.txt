@@ -1,0 +1,13 @@
+# LiveKit CLI deployment manifest. Keep direct pins aligned with pyproject.toml.
+# The local package supplies the core dependencies declared in pyproject.toml.
+.
+
+# Explicit LiveKit SDK entry lets the CLI identify this as a Python agent.
+livekit-agents==1.8.6
+
+# Runtime provider extras from pyproject.toml [project.optional-dependencies].
+livekit-plugins-sarvam==1.8.6
+python-dotenv==1.2.4
+google-genai==2.30.1
+groq==0.31.0
+sarvamai==0.1.36

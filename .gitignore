@@ -17,6 +17,8 @@ venv/
 # Node
 node_modules/
 .next/
+.next-phase3/
+apps/web/.next-repair-build/
 out/
 
 # Local tooling
@@ -24,3 +26,5 @@ out/
 evals/results/
 apps/agent/.coverage
 apps/agent/.mypy_cache/
+apps/agent/*.egg-info/
+apps/web/src/app/test-file.tmp

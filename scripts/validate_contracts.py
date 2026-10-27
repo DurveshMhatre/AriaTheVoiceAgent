@@ -43,6 +43,10 @@ def main() -> int:
         "call_events": CONTRACTS / "call_events.json",
         "call_summary": CONTRACTS / "call_summary.json",
         "tenant_config": CONTRACTS / "tenant_config.json",
+        "client_message": CONTRACTS / "client_message.json",
+        "token_response": CONTRACTS / "token_response.json",
+        "capacity_response": CONTRACTS / "capacity_response.json",
+        "api_error": CONTRACTS / "api_error.json",
     }
     passed = 0
     for name, schema_path in mapping.items():

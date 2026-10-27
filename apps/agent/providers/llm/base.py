@@ -11,6 +11,8 @@ class Message:
     content: str | None = None
     tool_calls: tuple[dict[str, Any], ...] = ()
     provider_metadata: dict[str, Any] | None = None
+    name: str | None = None
+    tool_call_id: str | None = None
 
 
 @dataclass(frozen=True)
@@ -21,4 +23,6 @@ class ToolCall:
 
 
 class LlmProvider(Protocol):
-    async def generate(self, messages: list[Message], tools: list[dict[str, Any]], params: dict[str, Any]) -> AsyncIterator[dict[str, Any]]: ...
+    async def generate(
+        self, messages: list[Message], tools: list[dict[str, Any]], params: dict[str, Any]
+    ) -> AsyncIterator[dict[str, Any]]: ...

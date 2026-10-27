@@ -204,16 +204,19 @@ Code runs locally with one documented command. Tests pass and you have shown the
 
 ## 10. Amendments (Phase 0)
 
-The following approved decisions amend any earlier conflicting wording in this file:
+The following decision updates amend earlier wording where applicable. Any item marked as blocked remains non-actionable until resolved:
 
-- **D1 Hosting:** Use Vercel Hobby for the hiring assessment only. Keep the web app portable and do not use Vercel-only storage, KV, or edge features. Record migration to Cloudflare Pages or Netlify before commercial use.
-- **D2 STT:** Use the official LiveKit Sarvam plugin with `saaras:v3`. Keep `saaras:v3-realtime` behind a configuration flag, disabled by default. Do not write a custom WebSocket client unless the Phase 2 plugin test fails.
+- **D1 Hosting:** Use Vercel Hobby for personal, non-commercial use in this project. No commercial showcase is in scope. Keep the web app portable and do not use Vercel-only storage, KV, or edge features. If scope changes to commercial use, re-check the current terms and choose a compliant host or obtain approval for a paid plan before deployment.
+- **D2 STT (superseded):** The original Phase 0 choice was legacy `saaras:v3`. The owner's Phase 2 delegation is recorded in D9 and selects `saaras:v3-realtime`; follow D9 and ADR-025 for current implementation.
 - **D3 LLM:** Do not hard-code one model. Resolve an ordered `model_candidates` list at startup against models available to the key and requiring tool calling. Initial candidates are `gemini-3.1-flash-lite`, then `gemini-3.5-flash`; never use preview or 2.x IDs. Groq remains the failover. Use fake data only.
 - **D4 Text mode:** Provide a first-class Voice/Text toggle over the same Brain and switch visibly to text when voice quota is exhausted.
-- **D5 Access:** Require evaluator login. Email/password with verification is primary, magic link is secondary, and a pre-created demo evaluator account is planned. Supabase custom SMTP is configured in the dashboard and is not represented by repository secrets. No anonymous calls.
+- **D5 Access:** Require evaluator login. Email/password with verification is primary, magic link is secondary, and a pre-created demo evaluator account is planned. Keep Supabase's built-in email sender for the current small, team-only development stage. Its current restrictions mean it cannot deliver to arbitrary external evaluator addresses; configure custom email delivery before external evaluator sign-up, verification, or other mail-dependent flows are needed. A pre-created verified account can still sign in with its credentials. Keep custom SMTP credentials in the dashboard, never in the repo. Future automatic provider failover needs Supabase Send Email Hook or an equivalent routing layer; a standby SMTP configuration alone does not create failover. No anonymous calls.
 - **D6 Contacts:** Keep contact values as `PLACEHOLDER`; Aria never speaks them. Follow-up language says the support team will follow up and records a ticket.
 - **D7 Database:** Use Supabase for auth, one batched call-end write for call/turn/tool/summary data, and one usage-counter update at call end. Mock orders and tenant config remain in code/YAML behind repository/loader interfaces.
 - **D8 Identity:** Keep order-ID-only lookup with `verified: false`. OTP is documented only. Evaluator login is distinct from customer verification.
 - **Phase 0 execution limit:** No application code, voice worker, UI, migrations, or deployment. Only contract-validation and environment-check tooling is executable.
+- **D9 Phase 2 provider selection (owner delegated 2026-10-25):** Pin `livekit-agents==1.8.6` and `livekit-plugins-sarvam==1.8.6` after official-doc review. Use Sarvam `STTRealtime` (`saaras:v3-realtime`, `stream_type="fast"`) as the Phase 2 primary because it provides interim transcripts for a new Python voice agent. This supersedes D2's default `saaras:v3` selection. On access failure, provider failure, or quota exhaustion, visibly switch to text mode on the same Brain; never silently spend more credits by reconnecting or switching to another metered provider. Keep legacy `saaras:v3` selectable for controlled diagnostics only. Use Sarvam Bulbul v3 for TTS with the same text-mode failure path.
 
-These amendments supersede the original wording in sections 5, 6.3, 6.7, and 6.9 wherever it conflicts with D1-D8.
+These amendments supersede the original wording in sections 5, 6.3, 6.7, and 6.9 wherever it conflicts with D1-D9.
+
+D9 also supersedes D2 and the conflicting STT default in ADR-008 and ADR-021.

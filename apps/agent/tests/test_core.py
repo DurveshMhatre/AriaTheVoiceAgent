@@ -10,7 +10,15 @@ IST = ZoneInfo("Asia/Kolkata")
 
 
 def test_order_id_variants() -> None:
-    variants = ["O R D one zero one", "order one oh one", "ord 101", "ORD-101", "o-r-d 1 0 1", "order zero one zero", "ord two five zero"]
+    variants = [
+        "O R D one zero one",
+        "order one oh one",
+        "ord 101",
+        "ORD-101",
+        "o-r-d 1 0 1",
+        "order zero one zero",
+        "ord two five zero",
+    ]
     assert all(normalize_order_id(value) for value in variants)
     assert normalize_order_id("book flight to Goa") is None
     assert normalize_order_id("ORD 12") is None
@@ -23,7 +31,15 @@ def test_confirmation_classifier() -> None:
 
 
 def test_literal_shipping_and_cod_boundaries() -> None:
-    config = {"policies": {"free_shipping_threshold_inr": 499, "free_shipping_rule": "above", "shipping_fee_inr": 50, "cod_limit_inr": 2500, "cod_limit_inclusive": True}}
+    config = {
+        "policies": {
+            "free_shipping_threshold_inr": 499,
+            "free_shipping_rule": "above",
+            "shipping_fee_inr": 50,
+            "cod_limit_inr": 2500,
+            "cod_limit_inclusive": True,
+        }
+    }
     assert shipping_fee(499, config) == 50
     assert shipping_fee(500, config) == 0
     assert cod_eligible(2500, config) is True

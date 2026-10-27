@@ -1,0 +1,28 @@
+const messages: Record<string, { message: string; action: string }> = {
+  AUTH_REQUIRED: { message: "Please sign in to start with Aria.", action: "Go to sign in." },
+  TOKEN_RATE_LIMIT: { message: "Too many start requests. Please wait a minute.", action: "Try again in one minute." },
+  CONCURRENT_CALL_LIMIT: { message: "Aria is busy with other callers.", action: "Try again in a minute or use text mode." },
+  DAILY_IP_CALL_LIMIT: { message: "Today's demo call limit has been reached on this network.", action: "Try again tomorrow." },
+  MONTHLY_LIVEKIT_MINUTE_CAP: { message: "Demo voice minutes are used up for this month.", action: "Choose text mode." },
+  MONTHLY_STT_CAP: { message: "Demo voice credits are used up for this month.", action: "Continue in text mode." },
+  MONTHLY_TTS_CAP: { message: "Demo voice credits are used up for this month.", action: "Continue in text mode." },
+  INVALID_ADMISSION_LIMITS: { message: "The call service is not configured correctly.", action: "Please contact the project owner." },
+  VOICE_CAP_REACHED: { message: "Demo capacity is currently full.", action: "Try text mode or come back later." },
+  VOICE_UNAVAILABLE: { message: "Aria could not start right now.", action: "Try again or continue in text mode." },
+  ORIGIN_NOT_ALLOWED: { message: "This page cannot start a call from this address.", action: "Reload the local app and try again." },
+  INVALID_REQUEST: { message: "The call request was not valid.", action: "Choose Voice or Text and try again." },
+  MIGRATION_NOT_APPLIED: { message: "Call capacity is not configured yet.", action: "Ask the project owner to finish setup." },
+  CALL_DURATION_LIMIT: { message: "This demo call reached its five-minute limit.", action: "Start a new call." },
+  PER_CALL_TTS_LIMIT: { message: "This call used its voice allowance.", action: "Continue in text mode." },
+  AGENT_START_TIMEOUT: { message: "Aria did not wake up in time.", action: "Retry or continue in text mode." },
+  CONNECTION_FAILED: { message: "The call connection was interrupted.", action: "Reconnect or continue in text mode." },
+  MIC_DENIED: { message: "Microphone access was blocked.", action: "Allow microphone access in browser settings, or choose text mode." },
+  NO_MICROPHONE: { message: "No microphone was found.", action: "Connect a microphone or choose text mode." },
+  UNSUPPORTED_BROWSER: { message: "This browser cannot start a voice call.", action: "Use a current Chrome or Edge browser, or choose text mode." },
+  TEXT_MODE_TURN_FAILED: { message: "I couldn't process that message.", action: "Please try again shortly." },
+  SUMMARY_UNAVAILABLE: { message: "The call summary is unavailable.", action: "Your transcript is still shown above." },
+  SESSION_EXPIRED: { message: "Your sign-in session expired.", action: "Sign in again." },
+  UNKNOWN_ERROR: { message: "Something unexpected happened.", action: "Try again or choose text mode." },
+};
+export function errorForCode(code: string) { return messages[code] ?? messages.UNKNOWN_ERROR; }
+export function allErrorCodes() { return Object.keys(messages); }

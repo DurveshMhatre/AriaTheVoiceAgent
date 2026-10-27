@@ -1,0 +1,1 @@
+{"schema_version":1,"event_id":"evt-final","call_id":"call-1","turn_id":null,"tenant_id":"aura","event_type":"call_ended","occurred_at":"2026-10-26T10:00:00Z","sequence":4,"data":{"reason":"session_closed","transcript":[]}}

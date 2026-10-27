@@ -28,10 +28,9 @@
   assertions: {required_phrases: ["cancellation"], forbidden_phrases: ["guaranteed"], expected_tools: ["cancel_order"]}
 - id: cancel_ord_101_refused
   description: Refuses cancellation for an out-for-delivery order and mentions doorstep refusal.
-  user_turns: ["Cancel ORD-101", "yes"]
+  user_turns: ["Cancel ORD-101", "yes", "yes"]
   mock_llm:
     - tool_call: {call_id: call-101-cancel, name: cancel_order, arguments: {order_id: "ORD-101", idempotency_key: "eval-101"}}
-    - text: "This order cannot be cancelled now; you may refuse delivery at the doorstep."
   assertions: {required_phrases: ["cannot", "refuse delivery"], forbidden_phrases: ["I have cancelled"], expected_tools: ["cancel_order"]}
 - id: unknown_id
   description: Does not reveal or guess another order.
