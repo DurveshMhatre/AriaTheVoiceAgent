@@ -278,3 +278,20 @@ Completed:
 
 - Added `docs/DEMO_VIDEO_GUIDE.md` with recording preflight, a timed 4:20 script, spoken ORD-101 lookup and safe cancellation refusal, a post-call transcript/summary segment, an architecture diagram/talk track, and the three-sentence approach note.
 - Linked the guide from README. No app behavior or quota limits were changed.
+
+## Evaluator daily voice limit exemption — plan before migration
+
+The owner requests that the verified `evaluator@ariaagent.com` account no longer need a manual SQL update to regain daily voice admissions.
+
+Plan and acceptance criteria:
+
+- Add an additive Supabase migration that exempts only this authenticated evaluator from the daily-per-IP call cap in both admission and capacity-display RPCs.
+- Keep the shared concurrent-call cap, monthly provider usage caps, per-call duration cap, and token-request rate limit in force to protect free-tier providers.
+- Update the Supabase runbook with migration order, exact dashboard steps, and verification guidance. Explain why manually releasing all daily rows can disrupt active-call accounting.
+- Do not apply the migration or access the user's Supabase project; the owner applies SQL manually.
+
+Completed:
+
+- Added `supabase/migrations/202610270001_evaluator_daily_voice_exemption.sql`. The verified `evaluator@ariaagent.com` user skips the daily-per-IP admission and capacity checks; all shared concurrency, monthly provider, per-call duration, and per-minute token-start caps remain active.
+- Updated `docs/RUNBOOK_SUPABASE.md` with the migration step and evaluator-account verification. The owner must apply the new migration in Supabase SQL Editor before the exemption takes effect.
+- Did not apply database changes or run a live voice call. The existing daily-release SQL is no longer needed after the migration is applied; manually releasing an active reservation could interfere with usage accounting.

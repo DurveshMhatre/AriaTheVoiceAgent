@@ -8,8 +8,11 @@ Apply these files in order:
 
 1. `supabase/migrations/202610250001_phase2_voice_admission.sql`
 2. `supabase/migrations/202610260001_phase3_capacity_release.sql`
+3. `supabase/migrations/202610270001_evaluator_daily_voice_exemption.sql`
 
 The first creates the usage counter, admission and token-request tables; enables RLS; revokes direct table access from `PUBLIC`, `anon`, and `authenticated`; and exposes rate-limit, reserve, release, and complete RPCs only to `service_role`. Every `SECURITY DEFINER` function pins `search_path` to `public, pg_temp`. The second adds the evaluator owner to reservations, an owner-bound reserve and release path for the authenticated web app, and a coarse capacity-read RPC. The web token route and release route use these owner-bound functions.
+
+The third migration exempts only the Supabase account whose email is `evaluator@ariaagent.com` from the daily-per-IP call count. It does not remove the shared four-call concurrency cap, monthly LiveKit/Sarvam quotas, five-minute call duration, or per-minute token-start limit. The account must exist in Supabase Auth with this email. This is intended for the single evaluator account; do not change the email match to a client-controlled request field.
 
 Reservations expire after 15 minutes. Calls have a maximum duration of 5 minutes, leaving a 10-minute margin. Normal worker completion writes usage and marks the reservation completed; browser end/abort calls the evaluator-bound release route; a worker crash or a room that never connects is recovered by expiry. Completed or released reservations do not consume concurrency. Daily call counting excludes only released reservations.
 
@@ -21,8 +24,9 @@ Reservations expire after 15 minutes. Calls have a maximum duration of 5 minutes
 4. In the repository, open `supabase/migrations/202610250001_phase2_voice_admission.sql`, copy the complete file, paste it into the editor, and click **Run**.
 5. Confirm the query finishes successfully. Do not edit the applied file.
 6. Open another **New query**, paste the complete contents of `supabase/migrations/202610260001_phase3_capacity_release.sql`, and click **Run**.
-7. Paste the verification query below into a new editor tab and click **Run**.
-8. Confirm every row says `PASS`. The expected output is 3 table rows and 8 function rows, each with `PASS` in the final column.
+7. Open another **New query**, paste the complete contents of `supabase/migrations/202610270001_evaluator_daily_voice_exemption.sql`, and click **Run**.
+8. Paste the verification query below into a new editor tab and click **Run**.
+9. Confirm every row says `PASS`. The expected output is 3 table rows and 8 function rows, each with `PASS` in the final column. To check that the evaluator account exists, run `select id, email, email_confirmed_at from auth.users where lower(email) = 'evaluator@ariaagent.com';` and verify exactly one row is returned and `email_confirmed_at` is not null. Do not share or commit the returned UUID.
 
 ```sql
 with expected_tables(name) as (
@@ -65,6 +69,8 @@ order by object_name;
 ```
 
 Expected rows: `table:voice_admissions`, `table:voice_token_requests`, `table:voice_usage_counters`, plus the eight `function:*` rows listed in the query. All results must be `PASS`. If a table says `FAIL`, stop; do not test the widget against that project. If the result count is not 11, stop and report the missing object names.
+
+The evaluator account no longer needs the manual daily-release query: its daily per-IP check is skipped by the third migration. Avoid manually marking all of the account's daily admissions as `released`; doing that while a call is active can prevent the worker from finalizing that call's usage correctly. A still-active session may continue to count against shared concurrency until it ends or expires.
 
 ## Local readiness
 
