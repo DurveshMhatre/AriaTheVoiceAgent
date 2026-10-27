@@ -242,3 +242,23 @@ Verification performed in this segment: contract JSON parsing and whitespace che
 The owner confirmed that local audio mode is working. The agent was deployed to the linked LiveKit Cloud project in the `ap-south` region, production deployment, as agent ID `CA_49j8Y9MZhtw8`. CLI status reports `Running` with one replica, and runtime logs confirm the `aria-voice` worker registered successfully. This verifies worker startup and registration; no browser-to-cloud real audio call was made during this deployment, so cloud end-to-end voice is not claimed as verified.
 
 Deployment fixes: use Python 3.12 to match `pyproject.toml`; add the pinned LiveKit CLI `requirements.txt` manifest; install it in the agent Dockerfile; and launch the package with `python -m voice.worker start` so relative imports resolve. The worker secrets file `.env.production` is ignored by Git and was uploaded to LiveKit Cloud through the CLI. LiveKit injects its own connection credentials at runtime.
+
+### Cloud session startup failure — plan before code
+
+Evidence from the production worker logs shows that the worker starts, registers as `aria-voice`, receives jobs, then raises `IndexError` while `_create_brain` calculates its repository root. The deployed container runs the application from `/app`, where `worker.py` has fewer parent directories than the local checkout. A separate `usage_update_failed` log indicates the Supabase usage-meter RPC also needs verification after the secrets update.
+
+Plan and acceptance criteria:
+
+- Resolve the repository/config root by checking the actual runtime layout instead of assuming a fixed `Path.parents` depth.
+- Package the canonical tenant-config schema with the agent build context so the existing runtime schema validation still runs in LiveKit Cloud.
+- Keep the packaged schema alongside the Aura tenant YAML (the current workspace ACL prevents creating a new `apps/agent/contracts/` folder); document/synchronize it with the canonical contract.
+- Teach the tenant loader to read either the repository layout used locally or the packaged agent layout used in the container.
+- Preserve the new safe stack-location logging that does not print exception messages or secrets.
+- Confirm the build-local package paths and schema resources are consistent; then redeploy and use one short Console session to verify that the agent joins and begins greeting. Record any remaining Supabase RPC error separately.
+
+Diagnosis and fix prepared locally:
+
+- The new stack log identifies `Path.resolve().parents[3]` in `_create_brain` as the exact `IndexError` source: the container path is `/app/voice/worker.py`, which has no fourth parent. This is a packaging/path bug, not a missing LiveKit connection secret.
+- Added runtime root discovery for both the repository checkout and the deployed `/app` layout. `TenantConfigLoader` now supports either `apps/agent/tenants` or packaged `tenants` paths.
+- Added a packaged copy of `tenant_config.json` beside the Aura tenant seed so runtime schema validation remains enabled in the LiveKit build context. Its SHA-256 matches the canonical `contracts/tenant_config.json` at authoring time.
+- This workspace cannot launch its configured `lk.exe` shim, so deployment and post-deploy session verification remain pending. The separate Supabase usage-meter RPC error also remains to be confirmed after secrets update.

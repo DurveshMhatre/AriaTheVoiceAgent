@@ -5,6 +5,7 @@ import json
 import logging
 import os
 import time
+import traceback
 from collections.abc import AsyncIterable
 from pathlib import Path
 from typing import Any
@@ -416,9 +417,26 @@ class _ClientMessages:
             self.room.off(name, callback)
 
 
+def _tenant_config_root() -> Path:
+    """Find contracts/config in either the source checkout or deployed app image."""
+    parents = Path(__file__).resolve().parents
+    for candidate in parents:
+        if (candidate / "apps" / "agent" / "tenants").is_dir() and (
+            candidate / "contracts" / "tenant_config.json"
+        ).is_file():
+            return candidate
+    for candidate in parents:
+        if (candidate / "tenants").is_dir() and (
+            (candidate / "contracts" / "tenant_config.json").is_file()
+            or (candidate / "tenants" / "tenant_config.schema.json").is_file()
+        ):
+            return candidate
+    raise RuntimeError("Tenant config and schema files are missing from the agent image")
+
+
 async def _create_brain(publisher: EventPublisher, *, real: bool) -> Brain:
     clock = SystemClock()
-    config = TenantConfigLoader(Path(__file__).resolve().parents[3]).load(publisher.tenant_id)
+    config = TenantConfigLoader(_tenant_config_root()).load(publisher.tenant_id)
     state = CallState()
     llm_mode = os.getenv("LLM_MODE", "auto" if real else "mock").strip().lower()
     if real and llm_mode == "mock":
@@ -613,11 +631,22 @@ async def _run_text_mode(
 
 
 def _log_failure(publisher: EventPublisher, event: str, exc: BaseException) -> None:
+    # Log source locations without exception messages, which may contain secrets
+    # supplied by an SDK or provider response.
+    stack = [
+        {
+            "file": Path(frame.filename).name,
+            "line": frame.lineno,
+            "function": frame.name,
+        }
+        for frame in traceback.extract_tb(exc.__traceback__)
+    ]
     logger.error(
         json.dumps(
             {
                 "event": event,
                 "error_type": type(exc).__name__,
+                "stack": stack,
                 "call_id": publisher.call_id,
                 "tenant_id": publisher.tenant_id,
             }

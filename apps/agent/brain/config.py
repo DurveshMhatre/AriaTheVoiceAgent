@@ -17,8 +17,12 @@ class TenantConfigLoader:
         self.root = root
 
     def load(self, tenant: str) -> dict[str, Any]:
-        config_path = self.root / "apps" / "agent" / "tenants" / f"{tenant}.yaml"
-        schema_path = self.root / "contracts" / "tenant_config.json"
+        repository_config = self.root / "apps" / "agent" / "tenants" / f"{tenant}.yaml"
+        packaged_config = self.root / "tenants" / f"{tenant}.yaml"
+        config_path = repository_config if repository_config.is_file() else packaged_config
+        repository_schema = self.root / "contracts" / "tenant_config.json"
+        packaged_schema = self.root / "tenants" / "tenant_config.schema.json"
+        schema_path = repository_schema if repository_schema.is_file() else packaged_schema
         data = yaml.safe_load(config_path.read_text(encoding="utf-8"))
         schema = json.loads(schema_path.read_text(encoding="utf-8"))
         errors = sorted(
