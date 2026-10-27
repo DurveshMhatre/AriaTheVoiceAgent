@@ -104,7 +104,7 @@ export default function CallExperience({ email }: { email: string }) {
       <header className="topbar">
         <div className="brand-lockup">
           <span className="brand-signal" aria-hidden="true" />
-          <span className="brand-line"><span className="brand-name">ARIA</span><span className="brand-divider">//</span><span className="brand-product">VOICE CX</span></span>
+          <span className="brand-line"><span className="brand-name">ARIA</span><span className="brand-divider">{"//"}</span><span className="brand-product">VOICE CX</span></span>
           <span className="topbar-caption">AURA SKINCARE · EVALUATOR DEMO</span>
         </div>
         <div className="topbar-actions">
